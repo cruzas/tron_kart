@@ -61,7 +61,7 @@ def pause():
                     
         #game_display.fill(white)
         
-        clock.tick(5)
+        clock.tick(30)
             
 
 
