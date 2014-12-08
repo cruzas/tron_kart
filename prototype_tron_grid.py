@@ -24,6 +24,9 @@ icon_img = pygame.image.load('apple.png')
 pygame.display.set_icon(icon_img)
 
 head_img = pygame.image.load('tron.png')
+head_width = 73
+head_height = 73
+head = pygame.transform.scale(head_img, (head_width, head_height))
 apple_img = pygame.image.load('apple.png')
 
 clock = pygame.time.Clock()
