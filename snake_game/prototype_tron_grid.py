@@ -13,23 +13,28 @@ white = (255, 255, 255)
 black = (0, 0, 0)
 red = (255, 0, 0)
 green = (0, 155, 0)
+blue = (111, 195, 223)
 
 display_width = 800
 display_height = 600
 
 game_display = pygame.display.set_mode((display_width, display_height))
-pygame.display.set_caption('Slither')
+pygame.display.set_caption('Tron Grid')
 
 icon_img = pygame.image.load('apple.png')
 pygame.display.set_icon(icon_img)
 
-head_img = pygame.image.load('head.png')
+head_img = pygame.image.load('tron.png')
+head_img = pygame.transform.scale(head_img, (30, 30))
+head_width = 73
+head_height = 73
+head = pygame.transform.scale(head_img, (head_width, head_height))
 apple_img = pygame.image.load('apple.png')
 
 clock = pygame.time.Clock()
 
 apple_thickness = 30
-block_size = 20
+block_size = 10
 fps = 15
 
 direction = 'right'
@@ -61,7 +66,7 @@ def pause():
                     
         #game_display.fill(white)
         
-        clock.tick(30)
+        clock.tick(5)
             
 
 
@@ -113,10 +118,10 @@ def snake(block_size, snake_list):
     elif direction == 'down':
         head = pygame.transform.rotate(head_img, 180)
     
-    game_display.blit(head, (snake_list[-1][0], snake_list[-1][1]))
+    game_display.blit(head, (snake_list[-1][0]-10, snake_list[-1][1]))
     
     for x_y in snake_list[:-1]:
-        game_display.fill(green, rect=[x_y[0], x_y[1], block_size, block_size])
+        game_display.fill(blue, rect=[x_y[0], x_y[1]+10, block_size, block_size])
 
 
 def text_objects(text, color, size):
@@ -152,7 +157,7 @@ def game_loop():
     lead_y_change = 0
 
     snake_list = []
-    snake_length = 1
+    snake_length = 100
 
     rand_apple_x, rand_apple_y = rand_apple_gen()
     
@@ -163,7 +168,6 @@ def game_loop():
             message_to_screen("press C to play again or Q to quit", black, 50, 'medium')
             pygame.display.update()
               
-
         while game_over == True:
             #game_display.fill(white)
             for event in pygame.event.get():
@@ -202,7 +206,6 @@ def game_loop():
                 elif event.key == pygame.K_p:
                     pause()
 
-
         if lead_x >= display_width or lead_x < 0 or lead_y >= display_height or lead_y < 0:
             game_over = True
 
@@ -239,11 +242,8 @@ def game_loop():
             elif lead_y + block_size > rand_apple_y and lead_y + block_size < rand_apple_y + apple_thickness:
                 rand_apple_x, rand_apple_y = rand_apple_gen()
                 snake_length += 1
-                
-                
 
         clock.tick(fps)
-
 
     pygame.quit()
     quit()

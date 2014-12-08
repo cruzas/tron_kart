@@ -1,3 +1,9 @@
+'''
+See example of a Cocos2D class.
+Make sure you have cocos2d for Python3.4 installed.
+'''
+
+
 import cocos
 
 class window(cocos.layer.Layer):
