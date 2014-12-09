@@ -8,7 +8,7 @@ import random
 
 
 class Moto:
-    def __init__(self, surface, img_path, pos, piece_color, size=(28, 28), piece_size=(4, 4), direction='up', length=80):
+    def __init__(self, surface, img_path, pos, piece_color, size=(28, 28), piece_size=(4, 4), direction='', length=80):
         '''Checking types'''
         self.surface = surface
         print(self.surface.get_rect())
@@ -28,6 +28,7 @@ class Moto:
         # position coordinates
         self.x = pos[0]
         self.y = pos[1]
+        self.rect = pygame.rect.Rect(self.x, self.y, self.size[0], self.size[1])
 
         # speed of a moto
         self.x_speed = 0
@@ -38,7 +39,6 @@ class Moto:
         self.length = length 
 
         self.life_points = 100
-
         pygame.display.update()
     #
 
@@ -50,10 +50,21 @@ class Moto:
         self.x_speed = speed[0]
         self.y_speed = speed[1]
     #
+
+    def collides(self, rect):
+        if self.rect.colliderect(rect):
+            return True
+        else:
+            return False
+
+    def update_rect(self):
+        self.rect = pygame.rect.Rect(self.x, self.y, self.size[0], self.size[1])
+    #
     
     def move(self):
         self.x += self.x_speed
         self.y += self.y_speed
+        self.update_rect()
     #
     
     def stop(self):
@@ -62,8 +73,7 @@ class Moto:
 
     def update(self):
         '''Updates the trail of the Moto'''
-        self.buffer.append([self.x, self.y])
-                
+        self.buffer.append(pygame.rect.Rect(self.x, self.y, self.piece_size[0], self.piece_size[1]))
         if len(self.buffer) > self.length:
             del self.buffer[0]
     #
@@ -77,28 +87,58 @@ class Moto:
             self.y = 0
         if self.y < 0:
             self.y = self.surface.get_rect()[3]
-        
-    def show(self):
+    #
     
-        '''Changes the directions of head_img'''
+    def show(self):
+        '''Changes the directions of the Moto'''
         if self.direction == 'right':
-            head = pygame.transform.rotate(self.image, 270)
-            
+            if self.previous_direction == 'left':
+                self.image = pygame.transform.rotate(self.image, 180)
+            elif self.previous_direction == 'right':
+                self.image = pygame.transform.rotate(self.image, 0)
+            elif self.previous_direction == 'up':
+                self.image = pygame.transform.rotate(self.image, -90)
+            elif self.previous_direction == 'down':
+                self.image = pygame.transform.rotate(self.image, 90)
+
         elif self.direction == 'left':
-            head = pygame.transform.rotate(self.image, 90)
-            
+            if self.previous_direction == 'left':
+                self.image = pygame.transform.rotate(self.image, 0)
+            elif self.previous_direction == 'right':
+                self.image = pygame.transform.rotate(self.image, 180)
+            elif self.previous_direction == 'up':
+                self.image = pygame.transform.rotate(self.image, 90)
+            elif self.previous_direction == 'down':
+                self.image = pygame.transform.rotate(self.image, -90)
+
         elif self.direction == 'up':
-            head = self.image
-            
+            if self.previous_direction == 'left':
+                self.image = pygame.transform.rotate(self.image, -90)
+            elif self.previous_direction == 'right':
+                self.image = pygame.transform.rotate(self.image, 90)
+            elif self.previous_direction == 'up':
+                self.image = pygame.transform.rotate(self.image, 0)
+            elif self.previous_direction == 'down':
+                self.image = pygame.transform.rotate(self.image, 180)
+
         elif self.direction == 'down':
-            head = pygame.transform.rotate(self.image, 180)           
+            if self.previous_direction == 'left':
+                self.image = pygame.transform.rotate(self.image, 90)
+            elif self.previous_direction == 'right':
+                self.image = pygame.transform.rotate(self.image, -90)
+            elif self.previous_direction == 'up':
+                self.image = pygame.transform.rotate(self.image, 0)
+            elif self.previous_direction == 'down':
+                self.image = pygame.transform.rotate(self.image, 180)
+        
+        self.previous_direction = self.direction         
 
         # displays the moto
-        self.surface.blit(head, (self.buffer[-1][0] - 12, self.buffer[-1][1] - 2))
+        self.surface.blit(self.image, (self.buffer[-1][0] - 12, self.buffer[-1][1] - 2))
 
         # displays the trail
         for x in self.buffer[:-1]: # getting elements from start to end - 1
-            self.surface.fill(self.piece_color, [x[0], x[1] + 10, self.piece_size[0], self.piece_size[1]])
+            self.surface.fill(self.piece_color, x)
     #
 #
     
@@ -166,18 +206,19 @@ class TronFood:
         self.size = size
         self.width = size[0]
         self.height = size[1]
-
-        try:
-            self.image = pygame.image.load(img_path)
-            self.image = pygame.transform.scale(self.image, self.size)
-        except (pygame.error, Exception):
-            raise pygame.error('img_path is not the path to an existent photo')
+        self.image = pygame.image.load(img_path)
+        self.image = pygame.transform.scale(self.image, self.size)
+        self.rect = pygame.rect.Rect(self.x, self.y, self.width, self.height)
     #
-
+    def update_rect(self):
+        self.rect = pygame.rect.Rect(self.x, self.y, self.width, self.height)
+    #
+    
     def generate(self):
         self.x = round(random.randrange(0, self.surface.get_rect()[2] - self.width))
         self.y = round(random.randrange(0, self.surface.get_rect()[3] - self.height))
-
+        self.update_rect()
+        
     def appear(self):
         self.surface.blit(self.image, (self.x, self.y))
     #
@@ -251,6 +292,9 @@ class TronGrid:
     def run(self):
         running = True
         
+        self.apple.generate()
+        self.apple.appear()
+        
         while running:
 
             for event in pygame.event.get():
@@ -301,7 +345,7 @@ class TronGrid:
                         self.pause()
  
             # end for
-
+            
             self.moto.pass_through_walls()
             self.moto_2.pass_through_walls()
             
@@ -319,14 +363,22 @@ class TronGrid:
             # show "new" motos
             self.moto.show()
             self.moto_2.show()
+           
+            self.apple.appear()
 
-
+            for x in self.moto_2.buffer:
+                if self.moto.collides(x):
+                    print('colliding')
+                    
+            
             # setting the score of the 2 players
             self.score(self.moto.life_points)
             self.score(self.moto_2.life_points, pos=(self.board.width - 100, 10))
 
-            
-            self.apple.appear()
+            if self.moto.collides(self.apple) or self.moto_2.collides(self.apple):
+                self.apple.generate()
+                self.apple.appear()
+    
             self.clock.tick(self.FPS)
             pygame.display.update()
     #
