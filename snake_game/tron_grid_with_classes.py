@@ -241,6 +241,7 @@ class TronFood:
 
 
 class TronGrid:
+    
     def __init__(self, title='Tron Grid'):
         """Constructor of the main class"""
         pygame.init()
@@ -303,6 +304,31 @@ class TronGrid:
                         pygame.quit()
                         quit()
             self.clock.tick(5)
+
+    #
+
+   
+    def gameover(self):
+        game_over = True
+        self.board.write("Game over, press C to play again or Q to quit", WHITE)
+        pygame.display.update()
+        while game_over:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    game_over = False
+                    pygame.quit()
+                    quit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_q:
+                        game_over = False
+                        pygame.quit()
+                        quit()
+                    elif event.key == pygame.K_c:
+                        self.board.update()
+                        self.moto = Moto(self.board.surface, self.img_path, self.pos, piece_color=RED)
+                        self.moto_2 = Moto(self.board.surface, self.img_path, self.pos_2, piece_color=RED)  
+                        game_over == False
+                        self.run()
     #
     
     def run(self):
@@ -383,6 +409,7 @@ class TronGrid:
                     self.board.update()
                     self.moto_2.show()
                     self.moto.isappearing = False
+                    self.gameover()
                     
                 elif self.moto.isappearing:
                     self.moto.show()
@@ -394,6 +421,7 @@ class TronGrid:
                     self.moto_2.isappearing = False
                     self.board.update()
                     self.moto.show()
+                    self.gameover()
                     
                 elif self.moto_2.isappearing:
                     self.moto_2.show()
