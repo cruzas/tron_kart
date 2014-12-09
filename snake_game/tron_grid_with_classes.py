@@ -8,6 +8,7 @@ import random
 
 
 class Moto:
+    BOTH = 2
     def __init__(self, surface, img_path, pos, piece_color, size=(28, 28), piece_size=(4, 4), direction='', length=80):
         '''Checking types'''
         
@@ -20,6 +21,7 @@ class Moto:
         self.image.set_colorkey((0, 0, 0))
         self.size = size
         self.image = pygame.transform.scale(self.image, (self.size))
+        self.isappearing = True
 
         self.piece_size = piece_size
         self.piece_color = piece_color
@@ -52,6 +54,7 @@ class Moto:
         self.y_speed = speed[1]
     #
 
+
     def collides(self, rect):
         if self.rect.colliderect(rect):
             return True
@@ -61,16 +64,9 @@ class Moto:
     def iscolliding(self, moto):
         for x in moto.buffer[0:-1]:
             if self.collides(x):
-                print('Square:',x)
-
-                return True
-            
-        for x in self.buffer[0:-1]:
-            if self.collides(x):
                 return True
         if self.collides(moto.rect):
-            return BOTH
-
+            return Moto.BOTH
         return False
 
 
@@ -78,8 +74,6 @@ class Moto:
         self.rect = pygame.rect.Rect(self.x, self.y, self.size[0], self.size[1])
     #
 
-    
-    
     def move(self):
         self.x += self.x_speed
         self.y += self.y_speed
@@ -298,8 +292,10 @@ class TronGrid:
         while paused:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
+
                     pygame.quit()
                     quit()
+                    
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_c:
                         paused = False
@@ -307,13 +303,14 @@ class TronGrid:
                         pygame.quit()
                         quit()
             self.clock.tick(5)
-     #
+    #
     
     def run(self):
         running = True
         
         self.apple.generate()
         self.apple.appear()
+
         
         while running:
 
@@ -373,17 +370,36 @@ class TronGrid:
             self.moto.move()
             self.moto_2.move()
 
-            # updating the board: color and image
-            self.board.update()
+             # updating the board: color and image
+            self.board.update() 
+
 
             # updating trail of the moto
             self.moto.update()
             self.moto_2.update()
+            
+            if self.moto_2.isappearing:
+                if self.moto.iscolliding(self.moto_2) == True:
+                    self.board.update()
+                    self.moto_2.show()
+                    self.moto.isappearing = False
+                    
+                elif self.moto.isappearing:
+                    self.moto.show()
+            else:
+                self.moto.show()
 
-            # show "new" motos
-            self.moto.show()
-            self.moto_2.show()
-           
+            if self.moto.isappearing:
+                if self.moto_2.iscolliding(self.moto) == True:
+                    self.moto_2.isappearing = False
+                    self.board.update()
+                    self.moto.show()
+                    
+                elif self.moto_2.isappearing:
+                    self.moto_2.show()
+            else:
+                self.moto_2.show()
+                        
             self.apple.appear()
                     
             
