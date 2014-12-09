@@ -129,7 +129,7 @@ def snake(block_size, snake_list):
     game_display.blit(head, (snake_list[-1][0]-10, snake_list[-1][1]))
     
     for x_y in snake_list[:-1]:
-        game_display.fill(blue, rect=[x_y[0], x_y[1]+10, block_size, block_size])
+        game_display.fill(tron_blue, rect=[x_y[0], x_y[1]+10, block_size, block_size])
 
 
 def text_objects(text, color, size):
