@@ -61,7 +61,10 @@ class Moto:
     def iscolliding(self, moto):
         for x in moto.buffer[0:-1]:
             if self.collides(x):
+                print('Square:',x)
+
                 return True
+            
         for x in self.buffer[0:-1]:
             if self.collides(x):
                 return True
