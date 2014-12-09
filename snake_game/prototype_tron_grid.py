@@ -18,8 +18,11 @@ blue = (111, 195, 223)
 display_width = 800
 display_height = 600
 
+
 game_display = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption('Tron Grid')
+back = pygame.image.load('board.jpeg')
+
 
 icon_img = pygame.image.load('apple.png')
 pygame.display.set_icon(icon_img)
@@ -44,7 +47,6 @@ med_font = pygame.font.SysFont('comicsansms', 50)
 large_font = pygame.font.SysFont('comicsansms', 80)
 
 def pause():
-
      paused = True
 
      message_to_screen("Paused", black, -100, 'large')
@@ -67,11 +69,10 @@ def pause():
         #game_display.fill(white)
         
         clock.tick(5)
-            
-
+     
 
 def score(score):
-    text = small_font.render("Score: " + str(score), True, black)
+    text = small_font.render("Score: " + str(score), True, white)
     game_display.blit(text, [0,0])
 
 def rand_apple_gen():
@@ -108,7 +109,6 @@ def game_intro():
         clock.tick(5)
 
 def snake(block_size, snake_list):
-
     if direction == 'right':
         head = pygame.transform.rotate(head_img, 270)
     elif direction == 'left':
@@ -117,12 +117,14 @@ def snake(block_size, snake_list):
         head = head_img
     elif direction == 'down':
         head = pygame.transform.rotate(head_img, 180)
-    
+
+    # displays the moto
     game_display.blit(head, (snake_list[-1][0]-10, snake_list[-1][1]))
-    
+
+    # displays the trail
     for x_y in snake_list[:-1]:
         game_display.fill(blue, rect=[x_y[0], x_y[1]+10, block_size, block_size])
-
+#
 
 def text_objects(text, color, size):
     if size == 'small':
@@ -169,7 +171,6 @@ def game_loop():
             pygame.display.update()
               
         while game_over == True:
-            #game_display.fill(white)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     game_over = False
@@ -214,7 +215,10 @@ def game_loop():
         lead_y += lead_y_change
         
         game_display.fill(white)
+        game_display.blit(back, (0, 0))
+        
         game_display.blit(apple_img, (rand_apple_x, rand_apple_y))
+
         snake_head = []
         snake_head.append(lead_x)
         snake_head.append(lead_y)
@@ -229,7 +233,7 @@ def game_loop():
         
         snake(block_size, snake_list)
 
-        score(snake_length - 1)
+        score(snake_length - 100)
         
         pygame.display.update()
 
