@@ -256,18 +256,18 @@ class TronGrid:
 
         self.title = title
         self.clock = pygame.time.Clock()
-        self.board = Board((640, 480), WHITE, 'images/board.jpeg', self.title)
+        self.board = Board((640, 480), WHITE, 'images/board2.jpg', self.title)
         self.FPS = 50
 
         self.img_path = 'images/tron.png'
 
         # first player
         self.pos = (100, self.board.resolution[1]/2)
-        self.moto = Moto(self.board.surface, self.img_path, self.pos, piece_color=RED)
+        self.moto = Moto(self.board.surface, self.img_path, self.pos, piece_color=TRONB)
 
         # second player
         self.pos_2 = (self.board.resolution[0] - 100, self.board.resolution[1]/2)
-        self.moto_2 = Moto(self.board.surface, self.img_path, self.pos_2, piece_color=RED)  
+        self.moto_2 = Moto(self.board.surface, self.img_path, self.pos_2, piece_color=TRONO)  
         
         self.food_img_path = 'images/apple.png'
         
@@ -282,8 +282,8 @@ class TronGrid:
     def reset(self):
         """Reset the background and the position of the 2 motos."""
         self.board.update()
-        self.moto = Moto(self.board.surface, self.img_path, self.pos, piece_color=RED)
-        self.moto_2 = Moto(self.board.surface, self.img_path, self.pos_2, piece_color=RED)  
+        self.moto = Moto(self.board.surface, self.img_path, self.pos, piece_color=TRONB)
+        self.moto_2 = Moto(self.board.surface, self.img_path, self.pos_2, piece_color=TRONO)  
     #
     
     def pause(self):
@@ -389,9 +389,7 @@ in case they acquire power (apples)"""
                         pygame.quit()
                         quit()
                     elif event.key == pygame.K_c:
-                        self.board.update()
-                        self.moto = Moto(self.board.surface, self.img_path, self.pos, piece_color=RED)
-                        self.moto_2 = Moto(self.board.surface, self.img_path, self.pos_2, piece_color=RED)  
+                        self.reset()
                         game_over == False
                         self.run()
     #
