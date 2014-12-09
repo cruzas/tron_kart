@@ -13,7 +13,6 @@ class Moto:
         '''Checking types'''
         
         self.surface = surface
-        print(self.surface.get_rect())
         self.direction = direction
         self.previous_direction = self.direction
         self.img_path = img_path
@@ -27,6 +26,7 @@ class Moto:
         self.piece_color = piece_color
         
         self.step = self.piece_size[0]
+        self.acceleration = 0
 
         # position coordinates
         self.x = pos[0]
@@ -241,7 +241,6 @@ class TronFood:
 
 
 class TronGrid:
-    
     def __init__(self, title='Tron Grid'):
         """Constructor of the main class"""
         pygame.init()
@@ -280,6 +279,12 @@ class TronGrid:
         pygame.quit()
     #
     
+    def reset(self):
+        self.board.update()
+        self.moto = Moto(self.board.surface, self.img_path, self.pos, piece_color=RED)
+        self.moto_2 = Moto(self.board.surface, self.img_path, self.pos_2, piece_color=RED)  
+    #
+    
     def pause(self):
         paused = True
 
@@ -304,10 +309,59 @@ class TronGrid:
                         pygame.quit()
                         quit()
             self.clock.tick(5)
-
     #
 
-   
+    def check_collisions(self):
+        if self.moto_2.isappearing:
+            if self.moto.iscolliding(self.moto_2) == True:
+                self.board.update()
+                self.moto_2.show()
+                self.moto.isappearing = False
+                self.gameover()
+                
+            elif self.moto.isappearing:
+                self.moto.show()
+        else:
+            self.moto.show()
+
+        if self.moto.isappearing:
+            if self.moto_2.iscolliding(self.moto) == True:
+                self.moto_2.isappearing = False
+                self.board.update()
+                self.moto.show()
+                self.gameover()
+                
+            elif self.moto_2.isappearing:
+                self.moto_2.show()
+        else:
+            self.moto_2.show()
+    #
+
+    def eating(self):
+        if self.moto.collides(self.apple):
+            if self.moto.step < 6:
+                self.moto.acceleration += 2
+                self.moto.step += self.moto.acceleration
+            else:
+                self.moto.step -= self.moto.acceleration
+                self.moto.acceleration = 0
+                
+            self.apple.generate()
+            self.apple.appear()
+
+        if self.moto_2.collides(self.apple):
+            
+            if self.moto_2.step < 6:
+                self.moto_2.acceleration += 2
+                self.moto_2.step += self.moto_2.acceleration
+            else:
+                self.moto_2.step -= self.moto_2.acceleration
+                self.moto_2.acceleration = 0
+                
+            self.apple.generate()
+            self.apple.appear()
+    #
+    
     def gameover(self):
         game_over = True
         self.board.write("Game over, press C to play again or Q to quit", WHITE)
@@ -399,45 +453,19 @@ class TronGrid:
              # updating the board: color and image
             self.board.update() 
 
-
             # updating trail of the moto
             self.moto.update()
             self.moto_2.update()
-            
-            if self.moto_2.isappearing:
-                if self.moto.iscolliding(self.moto_2) == True:
-                    self.board.update()
-                    self.moto_2.show()
-                    self.moto.isappearing = False
-                    self.gameover()
-                    
-                elif self.moto.isappearing:
-                    self.moto.show()
-            else:
-                self.moto.show()
 
-            if self.moto.isappearing:
-                if self.moto_2.iscolliding(self.moto) == True:
-                    self.moto_2.isappearing = False
-                    self.board.update()
-                    self.moto.show()
-                    self.gameover()
-                    
-                elif self.moto_2.isappearing:
-                    self.moto_2.show()
-            else:
-                self.moto_2.show()
+            self.check_collisions()
                         
             self.apple.appear()
                     
-            
             # setting the score of the 2 players
             self.score(self.moto.life_points)
             self.score(self.moto_2.life_points, pos=(self.board.width - 100, 10))
 
-            if self.moto.collides(self.apple) or self.moto_2.collides(self.apple):
-                self.apple.generate()
-                self.apple.appear()
+            self.eating() # if you eat an 'apple' your speed increases.
     
             self.clock.tick(self.FPS)
             pygame.display.update()
