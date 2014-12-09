@@ -14,6 +14,11 @@ black = (0, 0, 0)
 red = (255, 0, 0)
 green = (0, 155, 0)
 blue = (111, 195, 223)
+# New colours added
+tron_blue = (106, 243, 243)
+tron_blue2 = (198, 241, 240)
+
+# 
 
 display_width = 800
 display_height = 600
@@ -39,16 +44,16 @@ fps = 15
 
 direction = 'right'
 
-small_font = pygame.font.SysFont('comicsansms', 25)
-med_font = pygame.font.SysFont('comicsansms', 50)
-large_font = pygame.font.SysFont('comicsansms', 80)
+small_font = pygame.font.SysFont('helvetica', 25)
+med_font = pygame.font.SysFont('helvetica', 50)
+large_font = pygame.font.SysFont('helvetica', 80)
 
 def pause():
 
      paused = True
 
-     message_to_screen("Paused", black, -100, 'large')
-     message_to_screen("Press C to continue or Q to quit", black, 25)
+     message_to_screen("Paused", tron_blue, -100, 'large')
+     message_to_screen("Press C to continue or Q to quit", tron_blue2, 25)
 
      pygame.display.update()
 
@@ -97,12 +102,15 @@ def game_intro():
                     pygame.quit()
                     quit()
         
-        game_display.fill(white)
-        message_to_screen("Welcome to Slither", green, -100, 'large')
-        message_to_screen("The objective of the game is to eat red apples", black, -30)
-        message_to_screen("The more apples you eat, the longer you get", black, 10)
-        message_to_screen("If run into yourself, or the edges, you die!", black, 50)
-        message_to_screen("Press C to play, P to pause or Q to quit", black, 180)
+        game_display.fill(black)
+        # Welcome message changed
+        message_to_screen("Welcome to Tron Grid", tron_blue, -100, 'large')
+        message_to_screen("The objective of the game is to defeat your"
+                          + " opponent", tron_blue2, -30)
+        message_to_screen("Power-ups will help you become more powerful", tron_blue2, 10)
+        message_to_screen("If you run into yourself or the other player's trail"
+                          +" you die!", tron_blue2, 50)
+        message_to_screen("Press C to play, P to pause or Q to quit", tron_blue2, 180)
 
         pygame.display.update()
         clock.tick(5)
@@ -206,7 +214,8 @@ def game_loop():
                     
                 elif event.key == pygame.K_p:
                     pause()
-
+        # Code added to accomplish task of not running into walls but
+        # appearing on other side instead.
         if lead_x >= display_width:
              lead_x = 0
         if lead_x < 0:
