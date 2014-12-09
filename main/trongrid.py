@@ -1,6 +1,7 @@
-'''
-moto and other classes
-'''
+"""
+This file should contain just the main class of the game: TronGrid
+Other classes should be found in other files
+"""
 
 from colors import *
 import pygame
@@ -8,9 +9,11 @@ import random
 
 
 class Moto:
-    BOTH = 2
+
+    # static variable
+    BOTH = 2 # when 2 motorcycles hit each other by the head
+    
     def __init__(self, surface, img_path, pos, piece_color, size=(28, 28), piece_size=(4, 4), direction='', length=80):
-        '''Checking types'''
         
         self.surface = surface
         self.direction = direction
@@ -60,7 +63,8 @@ class Moto:
             return True
         else:
             return False
-
+    #
+    
     def iscolliding(self, moto):
         for x in moto.buffer[0:-1]:
             if self.collides(x):
@@ -68,7 +72,7 @@ class Moto:
         if self.collides(moto.rect):
             return Moto.BOTH
         return False
-
+    #
 
     def update_rect(self):
         self.rect = pygame.rect.Rect(self.x, self.y, self.size[0], self.size[1])
@@ -190,7 +194,7 @@ class Board:
         return self.width/2 - rect[2]/2, self.width/2 - rect[3]/2
     #
     
-    def write(self, msg, color, pos='CENTER', size=25, bold=False, italic=False):
+    def write(self, msg, color, pos='CENTER', size=30, bold=False, italic=False):
         """This function writes some text in a surface passed as parameter."""
         font = pygame.font.SysFont(None, size, bold, italic)
         text = font.render(msg, True, color)
@@ -224,6 +228,7 @@ class TronFood:
         self.image = pygame.transform.scale(self.image, self.size)
         self.rect = pygame.rect.Rect(self.x, self.y, self.width, self.height)
     #
+    
     def update_rect(self):
         self.rect = pygame.rect.Rect(self.x, self.y, self.width, self.height)
     #
@@ -232,7 +237,8 @@ class TronFood:
         self.x = round(random.randrange(0, self.surface.get_rect()[2] - self.width))
         self.y = round(random.randrange(0, self.surface.get_rect()[3] - self.height))
         self.update_rect()
-        
+    #
+    
     def appear(self):
         self.surface.blit(self.image, (self.x, self.y))
     #
@@ -252,53 +258,54 @@ class TronGrid:
         self.clock = pygame.time.Clock()
         self.board = Board((640, 480), WHITE, 'images/board.jpeg', self.title)
         self.FPS = 50
-        self.players = []
-        
+
         self.img_path = 'images/tron.png'
 
         # first player
         self.pos = (100, self.board.resolution[1]/2)
         self.moto = Moto(self.board.surface, self.img_path, self.pos, piece_color=RED)
-        self.players.append(self.moto)
 
         # second player
         self.pos_2 = (self.board.resolution[0] - 100, self.board.resolution[1]/2)
         self.moto_2 = Moto(self.board.surface, self.img_path, self.pos_2, piece_color=RED)  
-        self.players.append(self.moto_2)
-
+        
         self.food_img_path = 'images/apple.png'
-
-
+        
         # creating a TronFood to increase power
         self.apple = TronFood(self.board.surface, self.food_img_path)
 
         pygame.display.update()
-        
         self.run()
-
         pygame.quit()
     #
     
     def reset(self):
+        """Reset the background and the position of the 2 motos."""
         self.board.update()
         self.moto = Moto(self.board.surface, self.img_path, self.pos, piece_color=RED)
         self.moto_2 = Moto(self.board.surface, self.img_path, self.pos_2, piece_color=RED)  
     #
     
     def pause(self):
+        """Called when the game is paused"""
+        
         paused = True
-
-        self.board.write("Paused", WHITE)
+        
+        msg = "Paused"
+        size = 60
+        pos = self.board.middle_coords(msg, size)
+        self.board.write(msg, WHITE, (pos[0], pos[1] - 110), size)
 
         msg = "Press C to continue or Q to quit"
-        self.board.write("Press C to continue or Q to quit", WHITE, self.board.middle_coords(msg, 25), 25)
+        size = 25
+        pos = self.board.middle_coords(msg, size)
+        self.board.write(msg, WHITE, (pos[0], pos[1]), size)
 
         pygame.display.update()
 
         while paused:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-
                     pygame.quit()
                     quit()
                     
@@ -312,6 +319,7 @@ class TronGrid:
     #
 
     def check_collisions(self):
+        """Check if the 2 motos collide; if yes, the one that collided diseappears."""
         if self.moto_2.isappearing:
             if self.moto.iscolliding(self.moto_2) == True:
                 self.board.update()
@@ -338,6 +346,8 @@ class TronGrid:
     #
 
     def eating(self):
+        """This function is called every loop game to change the speed of the motos,
+in case they acquire power (apples)"""
         if self.moto.collides(self.apple):
             if self.moto.step < 6:
                 self.moto.acceleration += 2
@@ -363,6 +373,7 @@ class TronGrid:
     #
     
     def gameover(self):
+        """Game is over. You can start again or quit"""
         game_over = True
         self.board.write("Game over, press C to play again or Q to quit", WHITE)
         pygame.display.update()
@@ -385,12 +396,18 @@ class TronGrid:
                         self.run()
     #
     
+    def score(self, score, pos=(10, 10)):
+        """Changes the score of the players"""
+        self.board.write('Score: ' + str(score), WHITE, pos)
+    #
+    
     def run(self):
+        """Main function of the whole game, specifically of the TronGrid class."""
+        
         running = True
         
         self.apple.generate()
         self.apple.appear()
-
         
         while running:
 
@@ -442,7 +459,8 @@ class TronGrid:
                         self.pause()
  
             # end for
-            
+
+            # managing when you go through the walls
             self.moto.pass_through_walls()
             self.moto_2.pass_through_walls()
             
@@ -450,15 +468,16 @@ class TronGrid:
             self.moto.move()
             self.moto_2.move()
 
-             # updating the board: color and image
+            # updating the board: color and image
             self.board.update() 
 
-            # updating trail of the moto
+            # updating trail of the motorcycles
             self.moto.update()
             self.moto_2.update()
 
             self.check_collisions()
-                        
+
+            # make another apple appears
             self.apple.appear()
                     
             # setting the score of the 2 players
@@ -470,10 +489,7 @@ class TronGrid:
             self.clock.tick(self.FPS)
             pygame.display.update()
     #
-    
-    def score(self, score, pos=(10, 10)):
-        self.board.write('Score: ' + str(score), WHITE, pos)
 
 #
 
-tron_grid = TronGrid()
+tron_grid = TronGrid() # TronGrid object := starts all the game
