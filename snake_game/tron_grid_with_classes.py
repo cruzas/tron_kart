@@ -10,6 +10,7 @@ import random
 class Moto:
     def __init__(self, surface, img_path, pos, piece_color, size=(28, 28), piece_size=(4, 4), direction='', length=80):
         '''Checking types'''
+        
         self.surface = surface
         print(self.surface.get_rect())
         self.direction = direction
@@ -57,9 +58,24 @@ class Moto:
         else:
             return False
 
+    def iscolliding(self, moto):
+        for x in moto.buffer[0:-1]:
+            if self.collides(x):
+                return True
+        for x in self.buffer[0:-1]:
+            if self.collides(x):
+                return True
+        if self.collides(moto.rect):
+            return BOTH
+
+        return False
+
+
     def update_rect(self):
         self.rect = pygame.rect.Rect(self.x, self.y, self.size[0], self.size[1])
     #
+
+    
     
     def move(self):
         self.x += self.x_speed
@@ -91,6 +107,7 @@ class Moto:
     
     def show(self):
         '''Changes the directions of the Moto'''
+        
         if self.direction == 'right':
             if self.previous_direction == 'left':
                 self.image = pygame.transform.rotate(self.image, 180)
@@ -127,14 +144,14 @@ class Moto:
             elif self.previous_direction == 'right':
                 self.image = pygame.transform.rotate(self.image, -90)
             elif self.previous_direction == 'up':
-                self.image = pygame.transform.rotate(self.image, 0)
-            elif self.previous_direction == 'down':
                 self.image = pygame.transform.rotate(self.image, 180)
-        
-        self.previous_direction = self.direction         
+            elif self.previous_direction == 'down':
+                self.image = pygame.transform.rotate(self.image, 0)
+                
+        self.previous_direction = self.direction
 
         # displays the moto
-        self.surface.blit(self.image, (self.buffer[-1][0] - 12, self.buffer[-1][1] - 2))
+        self.surface.blit(self.image, (self.buffer[-1][0]-12, self.buffer[-1][1]-12))
 
         # displays the trail
         for x in self.buffer[:-1]: # getting elements from start to end - 1
@@ -237,7 +254,7 @@ class TronGrid:
         self.title = title
         self.clock = pygame.time.Clock()
         self.board = Board((640, 480), WHITE, 'images/board.jpeg', self.title)
-        self.FPS = 30
+        self.FPS = 50
         self.players = []
         
         self.img_path = 'images/tron.png'
@@ -365,10 +382,6 @@ class TronGrid:
             self.moto_2.show()
            
             self.apple.appear()
-
-            for x in self.moto_2.buffer:
-                if self.moto.collides(x):
-                    print('colliding')
                     
             
             # setting the score of the 2 players
