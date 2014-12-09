@@ -220,7 +220,7 @@ def game_loop():
         lead_x += lead_x_change
         lead_y += lead_y_change
         
-        game_display.fill(white)
+        game_display.fill(black)
         game_display.blit(apple_img, (rand_apple_x, rand_apple_y))
         snake_head = []
         snake_head.append(lead_x)
