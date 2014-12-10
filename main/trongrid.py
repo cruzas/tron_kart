@@ -269,7 +269,8 @@ class TronGrid:
             raise TypeError('title is not a str')
         
         pygame.init()
-
+        pygame.mixer.init()
+        
         self.title = title
         self.clock = pygame.time.Clock()
         self.board = Board((640, 480), WHITE, 'images/board2.jpg', self.title)
@@ -341,7 +342,7 @@ class TronGrid:
             
             # self.moto will be "destroyed"
             if self.moto.iscolliding(self.moto_2) == True:
-                pygame.mixer.music.play(0)
+                self.explosion_sound.play(0)
                 self.moto.explode()
                 self.board.update()
                 self.moto_2.show()
@@ -358,7 +359,7 @@ class TronGrid:
             
             # moto_2 will be "destroyed"
             if self.moto_2.iscolliding(self.moto) == True:
-                pygame.mixer.music.play(0)
+                self.explosion_sound.play(0)
                 self.moto_2.explode()
                 self.moto_2.isappearing = False
                 self.board.update()
@@ -431,10 +432,14 @@ class TronGrid:
         """Main function of the whole game, specifically of the TronGrid class."""
         
         running = True
-        pygame.mixer.music.load('sounds/explosion.aiff')
+        
         self.apple.generate()
         self.apple.appear()
-        
+
+        self.explosion_sound = pygame.mixer.Sound('sounds/explosion.aiff')
+        ## self.game_music = pygame.mixer.Sound('backgroun_music_path')
+
+        ## self.game_music.play(-1)
         while running:
 
             for event in pygame.event.get():
