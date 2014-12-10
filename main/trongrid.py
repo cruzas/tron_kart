@@ -285,7 +285,7 @@ class TronGrid:
         self.pos_2 = (self.board.resolution[0] - 100, self.board.resolution[1]/2)
         self.moto_2 = Moto(self.board.surface, self.img_path, self.pos_2, piece_color=TRON_O)
         
-        self.food_img_path = 'images/apple.png'
+        self.food_img_path = 'images/random.png'
         
         # creating a TronFood to increase power
         self.apple = TronFood(self.board.surface, self.food_img_path)
