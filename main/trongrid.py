@@ -42,11 +42,27 @@ class Moto:
 
         # holds the pieces of the trail
         self.buffer = []
-        self.length = length 
+        self.length = length
+
+        # creating a list with images for the explosions
+        self.explo_paths = ['images/explosion/explo0.png', 'images/explosion/explo1.png', 'images/explosion/explo2.png']
+        self.explosion = []
+        
+        for path in self.explo_paths:
+            image = pygame.image.load(path)
+            image = pygame.transform.scale(image, (60, 60))
+            self.explosion.append(image)
 
         self.lives = 3
         pygame.display.update()
     #
+
+    def explode(self):
+        for status in self.explosion:
+            self.surface.blit(status, (self.x, self.y))
+            pygame.display.update()
+            pygame.time.wait(2)
+        
 
     def set_direction(self, direction):
         self.direction = direction
@@ -158,6 +174,7 @@ class Moto:
         for x in self.buffer[:-1]: # getting elements from start to end - 1
             self.surface.fill(self.piece_color, x)
     #
+
 #
     
 
@@ -249,10 +266,10 @@ class TronFood:
 class TronGrid:
     def __init__(self, title='Tron Grid'):
         """Constructor of the main class"""
-        pygame.init()
-
         if type(title) != str:
             raise TypeError('title is not a str')
+        
+        pygame.init()
 
         self.title = title
         self.clock = pygame.time.Clock()
@@ -262,6 +279,7 @@ class TronGrid:
         self.img_path = 'images/tron.png'
 
         # first player
+        self.moto_size = (28, 28)
         self.pos = (100, self.board.resolution[1]/2)
         self.moto = Moto(self.board.surface, self.img_path, self.pos, piece_color=TRON_Y)
 
@@ -285,7 +303,7 @@ class TronGrid:
         self.moto = Moto(self.board.surface, self.img_path, self.pos, piece_color=TRON_Y)
         self.moto_2 = Moto(self.board.surface, self.img_path, self.pos_2, piece_color=TRON_O)
     #
-    
+
     def pause(self):
         """Called when the game is paused"""
         
@@ -321,9 +339,13 @@ class TronGrid:
     def check_collisions(self):
         """Check if the 2 motos collide; if yes, the one that collided disappears."""
         if self.moto_2.isappearing:
+            
+            # self.moto will be "destroyed"
             if self.moto.iscolliding(self.moto_2) == True:
+                self.moto.explode()
                 self.board.update()
                 self.moto_2.show()
+                
                 self.moto.isappearing = False
                 self.gameover()
                 
@@ -333,7 +355,11 @@ class TronGrid:
             self.moto.show()
 
         if self.moto.isappearing:
+            
+            # moto_2 will be "destroyed"
             if self.moto_2.iscolliding(self.moto) == True:
+
+                self.moto_2.explode()
                 self.moto_2.isappearing = False
                 self.board.update()
                 self.moto.show()
@@ -459,7 +485,7 @@ class TronGrid:
                         self.pause()
  
             # end for
-
+            
             # managing when you go through the walls
             self.moto.pass_through_walls()
             self.moto_2.pass_through_walls()
@@ -479,7 +505,7 @@ class TronGrid:
 
             # make another apple appears
             self.apple.appear()
-                    
+
             # setting the score of the 2 players
             self.score(self.moto.lives, 'P1')
             self.score(self.moto_2.lives, 'P2', pos=(self.board.width - 72, 10))
