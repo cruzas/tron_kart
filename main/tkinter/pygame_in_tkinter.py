@@ -1,3 +1,8 @@
+"""
+Tkinter with PyGame
+taken from SO
+"""
+
 import tkinter as tk
 import os
 
