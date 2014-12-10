@@ -13,7 +13,7 @@ class Moto:
     # static variable
     BOTH = 2 # when 2 motorcycles hit each other by the head
     
-    def __init__(self, surface, img_path, pos, piece_color, size=(28, 28), piece_size=(4, 4), direction='', length=80):
+    def __init__(self, surface, img_path, pos, piece_color, size=(30, 30), piece_size=(4, 4), direction='', length=80):
         
         self.surface = surface
         self.direction = direction
@@ -44,7 +44,7 @@ class Moto:
         self.buffer = []
         self.length = length 
 
-        self.life_points = 100
+        self.lives = 3
         pygame.display.update()
     #
 
@@ -115,7 +115,7 @@ class Moto:
             elif self.previous_direction == 'right':
                 self.image = pygame.transform.rotate(self.image, 0)
             elif self.previous_direction == 'up':
-                self.image = pygame.transform.rotate(self.image, -90)
+                self.image = pygame.transform.rotate(self.image, 270)
             elif self.previous_direction == 'down':
                 self.image = pygame.transform.rotate(self.image, 90)
 
@@ -127,11 +127,11 @@ class Moto:
             elif self.previous_direction == 'up':
                 self.image = pygame.transform.rotate(self.image, 90)
             elif self.previous_direction == 'down':
-                self.image = pygame.transform.rotate(self.image, -90)
+                self.image = pygame.transform.rotate(self.image, 270)
 
         elif self.direction == 'up':
             if self.previous_direction == 'left':
-                self.image = pygame.transform.rotate(self.image, -90)
+                self.image = pygame.transform.rotate(self.image, 270)
             elif self.previous_direction == 'right':
                 self.image = pygame.transform.rotate(self.image, 90)
             elif self.previous_direction == 'up':
@@ -143,7 +143,7 @@ class Moto:
             if self.previous_direction == 'left':
                 self.image = pygame.transform.rotate(self.image, 90)
             elif self.previous_direction == 'right':
-                self.image = pygame.transform.rotate(self.image, -90)
+                self.image = pygame.transform.rotate(self.image, 270)
             elif self.previous_direction == 'up':
                 self.image = pygame.transform.rotate(self.image, 180)
             elif self.previous_direction == 'down':
@@ -263,11 +263,11 @@ class TronGrid:
 
         # first player
         self.pos = (100, self.board.resolution[1]/2)
-        self.moto = Moto(self.board.surface, self.img_path, self.pos, piece_color=TRONB)
+        self.moto = Moto(self.board.surface, self.img_path, self.pos, piece_color=TRON_Y)
 
         # second player
         self.pos_2 = (self.board.resolution[0] - 100, self.board.resolution[1]/2)
-        self.moto_2 = Moto(self.board.surface, self.img_path, self.pos_2, piece_color=TRONO)  
+        self.moto_2 = Moto(self.board.surface, self.img_path, self.pos_2, piece_color=TRON_O)
         
         self.food_img_path = 'images/apple.png'
         
@@ -282,8 +282,8 @@ class TronGrid:
     def reset(self):
         """Reset the background and the position of the 2 motos."""
         self.board.update()
-        self.moto = Moto(self.board.surface, self.img_path, self.pos, piece_color=TRONB)
-        self.moto_2 = Moto(self.board.surface, self.img_path, self.pos_2, piece_color=TRONO)  
+        self.moto = Moto(self.board.surface, self.img_path, self.pos, piece_color=TRON_Y)
+        self.moto_2 = Moto(self.board.surface, self.img_path, self.pos_2, piece_color=TRON_O)
     #
     
     def pause(self):
@@ -319,7 +319,7 @@ class TronGrid:
     #
 
     def check_collisions(self):
-        """Check if the 2 motos collide; if yes, the one that collided diseappears."""
+        """Check if the 2 motos collide; if yes, the one that collided disappears."""
         if self.moto_2.isappearing:
             if self.moto.iscolliding(self.moto_2) == True:
                 self.board.update()
@@ -346,8 +346,10 @@ class TronGrid:
     #
 
     def eating(self):
-        """This function is called every loop game to change the speed of the motos,
-in case they acquire power (apples)"""
+        """
+        This function is called every loop game to change the speed of the motos,
+        in case they acquire power (apples)
+        """
         if self.moto.collides(self.apple):
             if self.moto.step < 6:
                 self.moto.acceleration += 2
@@ -394,9 +396,9 @@ in case they acquire power (apples)"""
                         self.run()
     #
     
-    def score(self, score, pos=(10, 10)):
+    def score(self, score, player, pos=(10, 10)):
         """Changes the score of the players"""
-        self.board.write('Score: ' + str(score), WHITE, pos)
+        self.board.write(player + ': ' + str(score), WHITE, pos)
     #
     
     def run(self):
@@ -419,36 +421,36 @@ in case they acquire power (apples)"""
                     self.moto_2.previous_direction = self.moto_2.direction
 
                     # managing the first moto movement
-                    if event.key == pygame.K_LEFT and self.moto.previous_direction != 'right':
+                    if event.key == pygame.K_a and self.moto.previous_direction != 'right':
                         self.moto.set_direction('left')
                         self.moto.set_speed((-self.moto.step, 0))
                         
-                    elif event.key == pygame.K_RIGHT and self.moto.previous_direction != 'left':
+                    elif event.key == pygame.K_d and self.moto.previous_direction != 'left':
                         self.moto.set_direction('right')
                         self.moto.set_speed((self.moto.step, 0))
                         
-                    elif event.key == pygame.K_UP and self.moto.previous_direction != 'down':
+                    elif event.key == pygame.K_w and self.moto.previous_direction != 'down':
                         self.moto.set_direction('up')
                         self.moto.set_speed((0, -self.moto.step))
                         
-                    elif event.key == pygame.K_DOWN and self.moto.previous_direction != 'up':
+                    elif event.key == pygame.K_s and self.moto.previous_direction != 'up':
                         self.moto.set_direction('down')
                         self.moto.set_speed((0, self.moto.step))
 
                     # managing the second moto movement
-                    if event.key == pygame.K_a and self.moto_2.previous_direction != 'right':
+                    if event.key == pygame.K_LEFT and self.moto_2.previous_direction != 'right':
                         self.moto_2.set_direction('left')
                         self.moto_2.set_speed((-self.moto_2.step, 0))
                         
-                    elif event.key == pygame.K_d and self.moto_2.previous_direction != 'left':
+                    elif event.key == pygame.K_RIGHT and self.moto_2.previous_direction != 'left':
                         self.moto_2.set_direction('right')
                         self.moto_2.set_speed((self.moto_2.step, 0))
                         
-                    elif event.key == pygame.K_w and self.moto_2.previous_direction != 'down':
+                    elif event.key == pygame.K_UP and self.moto_2.previous_direction != 'down':
                         self.moto_2.set_direction('up')
                         self.moto_2.set_speed((0, -self.moto_2.step))
                         
-                    elif event.key == pygame.K_s and self.moto_2.previous_direction != 'up':
+                    elif event.key == pygame.K_DOWN and self.moto_2.previous_direction != 'up':
                         self.moto_2.set_direction('down')
                         self.moto_2.set_speed((0, self.moto_2.step))
 
@@ -479,8 +481,8 @@ in case they acquire power (apples)"""
             self.apple.appear()
                     
             # setting the score of the 2 players
-            self.score(self.moto.life_points)
-            self.score(self.moto_2.life_points, pos=(self.board.width - 100, 10))
+            self.score(self.moto.lives, 'P1')
+            self.score(self.moto_2.lives, 'P2', pos=(self.board.width - 72, 10))
 
             self.eating() # if you eat an 'apple' your speed increases.
     
