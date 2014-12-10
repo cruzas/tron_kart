@@ -1,5 +1,6 @@
-tron_grid
+Tron Grid
 =========
+
 This repository holds the work of four contributors with the aim to develop a game inspired by the classic Tron game.
 
 Please note that this project is currently under development. 
