@@ -61,7 +61,7 @@ class Moto:
         for status in self.explosion:
             self.surface.blit(status, (self.x, self.y))
             pygame.display.update()
-            pygame.time.wait(2)
+            pygame.time.wait(5)
         
 
     def set_direction(self, direction):
@@ -72,7 +72,6 @@ class Moto:
         self.x_speed = speed[0]
         self.y_speed = speed[1]
     #
-
 
     def collides(self, rect):
         if self.rect.colliderect(rect):
