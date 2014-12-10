@@ -297,7 +297,9 @@ class TronGrid:
     
     def reset(self):
         """Reset the background and the position of the 2 motos."""
-        self.board.update()
+ #       self.board.update()
+        self.score(self.moto.lives, 'P1')
+        self.score(self.moto_2.lives, 'P2', pos=(self.board.width - 72, 10))
         self.moto = Moto(self.board.surface, self.img_path, self.pos, piece_color=TRON_Y)
         self.moto_2 = Moto(self.board.surface, self.img_path, self.pos_2, piece_color=TRON_O)
     #
@@ -342,9 +344,9 @@ class TronGrid:
             if self.moto.iscolliding(self.moto_2) == True:
                 self.explosion_sound.play(0)
                 self.moto.explode()
+                self.moto.lives -= 1
                 self.board.update()
-                self.moto_2.show()
-                
+                self.moto_2.show()               
                 self.moto.isappearing = False
                 self.gameover()
                 
@@ -359,6 +361,7 @@ class TronGrid:
             if self.moto_2.iscolliding(self.moto) == True:
                 self.explosion_sound.play(0)
                 self.moto_2.explode()
+                self.moto_2.lives -= 1
                 self.moto_2.isappearing = False
                 self.board.update()
                 self.moto.show()
