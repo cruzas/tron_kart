@@ -52,7 +52,7 @@ class Moto:
             image = pygame.image.load(path)
             image = pygame.transform.scale(image, (60, 60))
             self.explosion.append(image)
-
+            
         self.lives = 3
         pygame.display.update()
     #
@@ -62,7 +62,7 @@ class Moto:
             self.surface.blit(status, (self.x, self.y))
             pygame.display.update()
             pygame.time.wait(5)
-        
+    #
 
     def set_direction(self, direction):
         self.direction = direction
@@ -90,7 +90,7 @@ class Moto:
     #
 
     def update_rect(self):
-        self.rect = pygame.rect.Rect(self.x, self.y, self.size[0], self.size[1])
+        self.rect = pygame.rect.Rect(self.x-12, self.y-12, self.size[0], self.size[1])
     #
 
     def move(self):
@@ -165,8 +165,6 @@ class Moto:
                 self.image = pygame.transform.rotate(self.image, 0)
                 
         self.previous_direction = self.direction
-
-        # displays the moto
         self.surface.blit(self.image, (self.buffer[-1][0]-12, self.buffer[-1][1]-12))
 
         # displays the trail
