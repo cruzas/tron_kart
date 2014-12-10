@@ -341,7 +341,6 @@ class TronGrid:
             
             # self.moto will be "destroyed"
             if self.moto.iscolliding(self.moto_2) == True:
-                pygame.mixer.music.load('sounds/explosion.aiff')
                 pygame.mixer.music.play(0)
                 self.moto.explode()
                 self.board.update()
@@ -359,7 +358,6 @@ class TronGrid:
             
             # moto_2 will be "destroyed"
             if self.moto_2.iscolliding(self.moto) == True:
-                pygame.mixer.music.load('sounds/explosion.aiff')
                 pygame.mixer.music.play(0)
                 self.moto_2.explode()
                 self.moto_2.isappearing = False
@@ -433,7 +431,7 @@ class TronGrid:
         """Main function of the whole game, specifically of the TronGrid class."""
         
         running = True
-        
+        pygame.mixer.music.load('sounds/explosion.aiff')
         self.apple.generate()
         self.apple.appear()
         
