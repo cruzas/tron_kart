@@ -421,10 +421,11 @@ class TronGrid:
                     elif event.key == pygame.K_c:
                         self.reset()
                         game_over == False
+                        self.game_music.stop()
                         self.run()
     #
-    
-    def score(self, score, player, pos=(10, 10)):
+        
+    def score(self, score, player, pos = (10, 10)):
         """Changes the score of the players"""
         self.board.write(player + ': ' + str(score), WHITE, pos)
     #
@@ -438,9 +439,9 @@ class TronGrid:
         self.apple.appear()
 
         self.explosion_sound = pygame.mixer.Sound('sounds/explosion.aiff')
-        ## self.game_music = pygame.mixer.Sound('backgroun_music_path')
-
-        ## self.game_music.play(-1)
+        self.game_music = pygame.mixer.Sound('sounds/music.aiff')
+        self.game_music.play(-1)
+ #       self.game_music.queue()
         while running:
 
             for event in pygame.event.get():
