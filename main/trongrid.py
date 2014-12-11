@@ -392,7 +392,7 @@ class TronGrid:
         # first player
         self.moto_size = (28, 28)
         self.pos = (100, self.board.resolution[1]/2)
-        self.moto = TronMoto(self.board.surface, "Steven Work", TronMoto.LIVES, self.img_path, self.pos, piece_color=TRON_Y)
+        self.moto = TronMoto(self.board.surface, "Kill Bill (S. Jobs)", TronMoto.LIVES, self.img_path, self.pos, piece_color=TRON_Y)
 
         # second player
         self.pos_2 = (self.board.resolution[0] - 100, self.board.resolution[1]/2)
@@ -417,7 +417,7 @@ class TronGrid:
         self.moto2 = TronMoto(self.board.surface, self.moto2.name, self.moto2.lives, self.img_path, self.pos_2, piece_color=TRON_O)
     #
 
-    def restart(self, name='PLAYER 1', name2='PLAYER 2'):
+    def restart(self, name='Mr. Weed', name2='Bush, The Laden'):
         self.board.update()
         self.moto = TronMoto(self.board.surface, name, TronMoto.LIVES, self.img_path, self.pos, piece_color=TRON_Y)
         self.moto2 = TronMoto(self.board.surface, name2, TronMoto.LIVES, self.img_path, self.pos_2, piece_color=TRON_O)
@@ -590,7 +590,7 @@ class TronGrid:
                     self.moto.previous_direction = self.moto.direction
                     self.moto2.previous_direction = self.moto2.direction
 
-                    # managing the first moto movement
+                    # FIRST PLAYER (MOVEMENT)
                     if event.key == pygame.K_a and self.moto.previous_direction != 'right':
                         self.moto.set_direction('left')
                         self.moto.set_position((-self.moto.step, 0))
@@ -606,8 +606,10 @@ class TronGrid:
                     elif event.key == pygame.K_s and self.moto.previous_direction != 'up':
                         self.moto.set_direction('down')
                         self.moto.set_position((0, self.moto.step))
+                    elif event.key == pygame.K_e:
+                        self.moto.stop()
 
-                    # managing the second moto movement
+                    # SECOND PLAYER (MOVEMENT)
                     if event.key == pygame.K_LEFT and self.moto2.previous_direction != 'right':
                         self.moto2.set_direction('left')
                         self.moto2.set_position((-self.moto2.step, 0))
@@ -623,6 +625,8 @@ class TronGrid:
                     elif event.key == pygame.K_DOWN and self.moto2.previous_direction != 'up':
                         self.moto2.set_direction('down')
                         self.moto2.set_position((0, self.moto2.step))
+                    elif event.key == pygame.K_RSHIFT:
+                        self.moto2.stop()
 
                     # pause
                     if event.key == pygame.K_p:
