@@ -6,7 +6,8 @@ Other classes should be found in other files
 from colors import *
 import pygame
 import random
-
+import sys
+import eztext
 
 class TronTimer:
     """This class should only be used for this project.
@@ -312,6 +313,9 @@ class TronBoard:
         except (pygame.error, Exception):
             self.using_img = False
     #
+
+    # def get_name(self):
+        
 
     def update(self):
         self.surface.fill(self.color)
