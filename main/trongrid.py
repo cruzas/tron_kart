@@ -384,7 +384,7 @@ class TronGrid:
         self.title = title
         self.clock = pygame.time.Clock()
         self.board = TronBoard((800, 600), WHITE, 'images/board2.jpg', self.title)
-        self.FPS = 50
+        self.FPS = 60
 
         # PLAYERS
         self.img_path = 'images/tron.png'
