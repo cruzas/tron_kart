@@ -471,7 +471,7 @@ class TronGrid:
 
     def manage_collisions(self):
         """Check if the 2 TronMoto are colliding. 
-        If yes, the one that hit the other disappears."""
+        If yes, the one that hit the other disappears"""
         
         # Checks if the self.moto is colliding with the other TronMoto
         if self.moto2.appearing:
@@ -483,6 +483,20 @@ class TronGrid:
 
                 self.win()
                 self.moto2.move()
+                self.show_status()
+            elif self.moto.colliding(self.moto2) == TronMoto.BOTH:
+                self.explosion_sound.play(0)
+                self.moto.explode()
+                self.moto2.explode()
+                self.moto.lives -= 1
+                self.moto2.lives -= 1
+                
+                self.moto.appearing = False
+                self.moto2.appearing = False
+
+                self.win()
+                self.moto2.move()
+                self.moto.move()
                 self.show_status()
                 
             elif self.moto.appearing:
@@ -498,8 +512,20 @@ class TronGrid:
                 self.moto2.explode()
                 self.moto2.lives -= 1
                 self.moto2.appearing = False
-                
                 self.win()
+                self.moto.move()
+                self.show_status()
+                
+            elif self.moto.colliding(self.moto2) == TronMoto.BOTH:
+                self.explosion_sound.play(0)
+                self.moto.explode()
+                self.moto2.explode()
+                self.moto.lives -= 1
+                self.moto2.lives -= 1
+                self.moto.appearing = False
+                self.moto2.appearing = False
+                self.win()
+                self.moto2.move()
                 self.moto.move()
                 self.show_status()
                 
@@ -507,7 +533,6 @@ class TronGrid:
                 self.moto2.move()
         else:
             self.moto2.move()
-    #
 
     def show_status(self):
         winning_player = ''
