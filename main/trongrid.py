@@ -563,11 +563,16 @@ class TronGrid:
         """Game is over. You can start again or quit"""
         game_over = True
 
-        msg = "Congratulations " + winner.name + ", you won!"
+        msg = ''
         size = 40
+
+        if winner == TronMoto.BOTH:
+            msg = "That's tie!"
+        else:
+            msg = "Congratulations " + winner.name + ", you won!"
+
         pos = self.board.get_middle_coords(msg, size)
         self.board.write(msg, WHITE, (pos[0], pos[1] - 110), size)
-
 
         msg = "Press C to play again or Q to quit"
         size = 25
@@ -605,6 +610,8 @@ class TronGrid:
 
     def win(self):
         """If there's a winner, it will be passed to the self.gameover method."""
+        if self.moto.lives == 0 and self.moto.lives == 0:
+            self.gameover(TronMoto.BOTH)
         if self.moto.lives == 0:
             self.gameover(self.moto2) 
         if self.moto2.lives == 0:
