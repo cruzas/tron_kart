@@ -208,7 +208,23 @@ class TronMoto:
                     self.set_position((0, -self.step))
                 if self.direction == "down":
                     self.set_position((0, self.step))
+                    
+            elif self.accelerating:
+                self.step += self.INC
+                self.accelerating = True
+                self.timer.start()
+                self.step -= self.INC
+                
+                self.set_direction(self.direction)
 
+                if self.direction == "right":
+                    self.set_position((self.step, 0))
+                if self.direction == "left":
+                    self.set_position((-self.step, 0))
+                if self.direction == "up":
+                    self.set_position((0, -self.step))
+                if self.direction == "down":
+                    self.set_position((0, self.step))
             # generates and makes appear an new obj
             obj.generate()
             obj.appear()
@@ -553,15 +569,12 @@ class TronGrid:
                         self.game_music.stop()
                         self.run()
     #
-<<<<<<< HEAD
         
     def score(self, score, player, pos = (10, 10)):
         """Changes the score of the players"""
-=======
     
     def set_score(self, score, player, pos=(10, 10)):
         """Changes the set_score of the players"""
->>>>>>> FETCH_HEAD
         self.board.write(player + ': ' + str(score), WHITE, pos)
     #
 
@@ -634,6 +647,7 @@ class TronGrid:
                         self.moto2.set_position((0, self.moto2.step))
                     elif event.key == pygame.K_RSHIFT:
                         self.moto2.stop()
+                        
 
                     # pause
                     if event.key == pygame.K_p:
