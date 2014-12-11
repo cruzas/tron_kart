@@ -8,13 +8,50 @@ import pygame
 import random
 
 
-class Moto:
+class TronTimer:
+    """This class should only be used for this project.
+    It simulates a Timer that has to be used inside a while or for loop.
+    The class uses a counter variable as time counter."""
+    def __init__(self, MAX):
+        """MAX represents the TronTimer 'time' that a TronTimer object has to 'wait'."""
+        self.max = MAX
+        self.t = 0
+        self.started = False
+        self.finished = False
+
+    def start(self):
+        self.stop()
+        self.started = True
+        
+    def inc(self):
+        if self.started:
+            if self.t >= self.max:
+                self.finished = True
+            else:
+                self.t += 1
+
+    def stopped(self):
+        return self.finished
+
+    def stop(self):
+        self.started - False
+        self.finished = False
+        self.t = 0
+    #
+    
+# end TronTimer
+
+
+class TronMoto:
+    """Main class containing the TronMoto for this game."""
 
     # static variable
     BOTH = 2 # when 2 motorcycles hit each other by the head
-    
-    def __init__(self, surface, img_path, pos, piece_color, size=(30, 30), piece_size=(4, 4), direction='', length=80):
-        
+    LIVES = 3
+
+    def __init__(self, surface, name, lives, img_path, pos, piece_color, size=(30, 30), piece_size=(4, 4), direction='', length=60):
+
+        self.name = name
         self.surface = surface
         self.direction = direction
         self.previous_direction = self.direction
@@ -23,25 +60,29 @@ class Moto:
         self.image.set_colorkey((0, 0, 0))
         self.size = size
         self.image = pygame.transform.scale(self.image, (self.size))
-        self.isappearing = True
-
+        self.appearing = True
+        
+        self.timer = TronTimer(100) # 100 is the amount of "time" that has to pass
+        
         self.piece_size = piece_size
         self.piece_color = piece_color
         
         self.step = self.piece_size[0]
-        self.acceleration = 0
-
+        self.INC = 2
+        
         # position coordinates
         self.x = pos[0]
         self.y = pos[1]
         self.rect = pygame.rect.Rect(self.x, self.y, self.size[0], self.size[1])
 
-        # speed of a moto
-        self.x_speed = 0
-        self.y_speed = 0
+        # step of a motorcycle
+        self.x_step = 0
+        self.y_step = 0
+
+        self.accelerating = False
 
         # holds the pieces of the trail
-        self.buffer = []
+        self.trail = []
         self.length = length
 
         # creating a list with images for the explosions
@@ -53,7 +94,8 @@ class Moto:
             image = pygame.transform.scale(image, (60, 60))
             self.explosion.append(image)
             
-        self.lives = 3
+        self.lives = lives
+        
         pygame.display.update()
     #
 
@@ -64,13 +106,21 @@ class Moto:
             pygame.time.wait(5)
     #
 
+    def decrease_trail(self, amount):
+        if len(self.trail) > amount:
+            n = 0
+            while n < amount:
+                del self.trail[0]
+                n += 1
+    #
+
     def set_direction(self, direction):
         self.direction = direction
     #
 
-    def set_speed(self, speed):
-        self.x_speed = speed[0]
-        self.y_speed = speed[1]
+    def set_position(self, step):
+        self.x_step = step[0]
+        self.y_step = step[1]
     #
 
     def collides(self, rect):
@@ -80,12 +130,12 @@ class Moto:
             return False
     #
     
-    def iscolliding(self, moto):
-        for x in moto.buffer[0:-1]:
+    def colliding(self, moto):
+        for x in moto.trail[0:-1]:
             if self.collides(x):
                 return True
         if self.collides(moto.rect):
-            return Moto.BOTH
+            return TronMoto.BOTH
         return False
     #
 
@@ -93,21 +143,23 @@ class Moto:
         self.rect = pygame.rect.Rect(self.x-12, self.y-12, self.size[0], self.size[1])
     #
 
-    def move(self):
-        self.x += self.x_speed
-        self.y += self.y_speed
+    def update_pos(self):
+         # managing when you go through the walls
+        self.pass_through_walls()
+        self.x += self.x_step
+        self.y += self.y_step
         self.update_rect()
     #
     
     def stop(self):
-        self.x_speed = self.y_speed = 0
+        self.x_step = self.y_step = 0
     #
 
-    def update(self):
-        '''Updates the trail of the Moto'''
-        self.buffer.append(pygame.rect.Rect(self.x, self.y, self.piece_size[0], self.piece_size[1]))
-        if len(self.buffer) > self.length:
-            del self.buffer[0]
+    def update_trail(self):
+        '''Updates the trail of the TronMoto'''
+        self.trail.append(pygame.rect.Rect(self.x, self.y, self.piece_size[0], self.piece_size[1]))
+        if len(self.trail) > self.length:
+            del self.trail[0]
     #
 
     def pass_through_walls(self):
@@ -120,9 +172,54 @@ class Moto:
         if self.y < 0:
             self.y = self.surface.get_rect()[3]
     #
+
+    def get_power(self, obj):
+        
+        if self.accelerating and self.timer.stopped():
+            self.step -= self.INC
+            self.accelerating = False
+            self.timer.stop()
+
+            self.set_direction(self.direction)
+            if self.direction == "right":
+                self.set_position((self.step, 0))
+            if self.direction == "left":
+                self.set_position((-self.step, 0))
+            if self.direction == "up":
+                self.set_position((0, -self.step))
+            if self.direction == "down":
+                self.set_position((0, self.step))       
+
+        if self.collides(obj):
+            if not self.accelerating:
+                self.step += self.INC
+                self.accelerating = True
+                self.timer.start()
+
+                self.decrease_trail(self.length / 2)
+                
+                self.set_direction(self.direction)
+
+                if self.direction == "right":
+                    self.set_position((self.step, 0))
+                if self.direction == "left":
+                    self.set_position((-self.step, 0))
+                if self.direction == "up":
+                    self.set_position((0, -self.step))
+                if self.direction == "down":
+                    self.set_position((0, self.step))
+
+            # generates and makes appear an new obj
+            obj.generate()
+            obj.appear()
+
+        self.timer.inc() # increments timer if it has started           
+    #
+            
     
-    def show(self):
-        '''Changes the directions of the Moto'''
+    def move(self):
+        '''Changes the directions of the TronMoto'''
+        self.update_trail()
         
         if self.direction == 'right':
             if self.previous_direction == 'left':
@@ -165,18 +262,22 @@ class Moto:
                 self.image = pygame.transform.rotate(self.image, 0)
                 
         self.previous_direction = self.direction
-        self.surface.blit(self.image, (self.buffer[-1][0]-12, self.buffer[-1][1]-12))
+        
+        # showing the head of the Motorcycle
+        self.surface.blit(self.image, (self.trail[-1][0]-12, self.trail[-1][1]-12))
 
         # displays the trail
-        for x in self.buffer[:-1]: # getting elements from start to end - 1
+        for x in self.trail[:-1]: # getting elements from start to end - 1
             self.surface.fill(self.piece_color, x)
     #
-
-#
+    
+# end TronMoto
     
 
-class Board:
-    def __init__(self, resolution, color, image_path, title='Board'):
+class TronBoard:
+    """This class represents the board of a TronGrid object."""
+    
+    def __init__(self, resolution, color, image_path, title='TronBoard'):
         self.title = title
         self.resolution = resolution
         self.width = resolution[0]
@@ -187,6 +288,8 @@ class Board:
         pygame.display.set_caption(self.title)
         self.surface.fill(self.color)
         self.using_img = True
+
+        # in case the image of the background is not loaded
         try:
             self.image = pygame.image.load(self.image_path).convert()
             self.image = pygame.transform.scale(self.image, self.resolution)
@@ -200,7 +303,7 @@ class Board:
             self.surface.blit(self.image, (0, 0))
     #
 
-    def middle_coords(self, msg, size, color=WHITE, bold=False, italic=False):
+    def get_middle_coords(self, msg, size, color=WHITE, bold=False, italic=False):
         """Returns the coordinates to put a centered message to the screen"""
         font = pygame.font.SysFont(None, size, bold, italic)
         text = font.render(msg, True, color)
@@ -221,16 +324,23 @@ class Board:
         else:
             self.surface.blit(text, pos)
     #
-#
+    
+# end TronBoard
 
 
 class TronFood:
     """Simple class to represent object of type TronFood"""
-    def __init__(self, surface, img_path, size=(30, 30), name='', power=10):
+
+    # static variable that keeps track of the type of powers-up that a TronFood can give
+    powers = ["SPEED", "SIZE"]
+    
+    def __init__(self, surface, img_path, power, size=(30, 30), name=''):
+
+        if power not in TronFood.powers:
+            raise ValueError('power has not a correct value')
         
         self.name = name
-        self.power = power
-
+        self.power = power # setting the type of power
         # coordinates of the TronFood object in the surface
         self.x = 0
         self.y = 0
@@ -261,6 +371,8 @@ class TronFood:
 
 
 class TronGrid:
+    """Main class of the game. It creates the TronMoto, TronFood and TronBoard objects, and manage all the connections."""
+    
     def __init__(self, title='Tron Grid'):
         """Constructor of the main class"""
         if type(title) != str:
@@ -271,24 +383,27 @@ class TronGrid:
         
         self.title = title
         self.clock = pygame.time.Clock()
-        self.board = Board((640, 480), WHITE, 'images/board2.jpg', self.title)
+        self.board = TronBoard((800, 600), WHITE, 'images/board2.jpg', self.title)
         self.FPS = 50
 
+        # PLAYERS
         self.img_path = 'images/tron.png'
 
         # first player
         self.moto_size = (28, 28)
         self.pos = (100, self.board.resolution[1]/2)
-        self.moto = Moto(self.board.surface, self.img_path, self.pos, piece_color=TRON_Y)
+        self.moto = TronMoto(self.board.surface, "Steven Work", TronMoto.LIVES, self.img_path, self.pos, piece_color=TRON_Y)
 
         # second player
         self.pos_2 = (self.board.resolution[0] - 100, self.board.resolution[1]/2)
-        self.moto_2 = Moto(self.board.surface, self.img_path, self.pos_2, piece_color=TRON_O)
+        self.moto2 = TronMoto(self.board.surface, "Bill Logical Gate", TronMoto.LIVES, self.img_path, self.pos_2, piece_color=TRON_O)
         
-        self.food_img_path = 'images/random.png'
-        
-        # creating a TronFood to increase power
-        self.apple = TronFood(self.board.surface, self.food_img_path)
+        # POWER
+        self.food_img_1 = 'images/random.png'
+        self.food_img_2 = 'images/random.png'
+
+        self.apple = TronFood(self.board.surface, self.food_img_1, TronFood.powers[0])
+        self.kiwi = TronFood(self.board.surface, self.food_img_2, TronFood.powers[1])
 
         pygame.display.update()
         self.run()
@@ -297,26 +412,28 @@ class TronGrid:
     
     def reset(self):
         """Reset the background and the position of the 2 motos."""
- #       self.board.update()
-        self.score(self.moto.lives, 'P1')
-        self.score(self.moto_2.lives, 'P2', pos=(self.board.width - 72, 10))
-        self.moto = Moto(self.board.surface, self.img_path, self.pos, piece_color=TRON_Y)
-        self.moto_2 = Moto(self.board.surface, self.img_path, self.pos_2, piece_color=TRON_O)
+        self.board.update()
+        self.moto = TronMoto(self.board.surface, self.moto.name, self.moto.lives, self.img_path, self.pos, piece_color=TRON_Y)
+        self.moto2 = TronMoto(self.board.surface, self.moto2.name, self.moto2.lives, self.img_path, self.pos_2, piece_color=TRON_O)
     #
+
+    def restart(self, name='PLAYER 1', name2='PLAYER 2'):
+        self.board.update()
+        self.moto = TronMoto(self.board.surface, name, TronMoto.LIVES, self.img_path, self.pos, piece_color=TRON_Y)
+        self.moto2 = TronMoto(self.board.surface, name2, TronMoto.LIVES, self.img_path, self.pos_2, piece_color=TRON_O)
+        
 
     def pause(self):
         """Called when the game is paused"""
-        
         paused = True
-        
         msg = "Paused"
         size = 60
-        pos = self.board.middle_coords(msg, size)
+        pos = self.board.get_middle_coords(msg, size)
         self.board.write(msg, WHITE, (pos[0], pos[1] - 110), size)
 
         msg = "Press C to continue or Q to quit"
         size = 25
-        pos = self.board.middle_coords(msg, size)
+        pos = self.board.get_middle_coords(msg, size)
         self.board.write(msg, WHITE, (pos[0], pos[1]), size)
 
         pygame.display.update()
@@ -336,77 +453,88 @@ class TronGrid:
             self.clock.tick(5)
     #
 
-    def check_collisions(self):
-        """Check if the 2 motos collide; if yes, the one that collided disappears."""
-        if self.moto_2.isappearing:
-            
-            # self.moto will be "destroyed"
-            if self.moto.iscolliding(self.moto_2) == True:
+    def manage_collisions(self):
+        """Check if the 2 TronMoto are colliding. 
+        If yes, the one that hit the other disappears."""
+        
+        # Checks if the self.moto is colliding with the other TronMoto
+        if self.moto2.appearing:
+            if self.moto.colliding(self.moto2) == True:
                 self.explosion_sound.play(0)
                 self.moto.explode()
                 self.moto.lives -= 1
-                self.board.update()
-                self.moto_2.show()               
-                self.moto.isappearing = False
-                self.gameover()
-                
-            elif self.moto.isappearing:
-                self.moto.show()
-        else:
-            self.moto.show()
+                self.moto.appearing = False
 
-        if self.moto.isappearing:
-            
-            # moto_2 will be "destroyed"
-            if self.moto_2.iscolliding(self.moto) == True:
-                self.explosion_sound.play(0)
-                self.moto_2.explode()
-                self.moto_2.lives -= 1
-                self.moto_2.isappearing = False
-                self.board.update()
-                self.moto.show()
-                self.gameover()
+                self.win()
+                self.moto2.move()
+                self.show_status()
                 
-            elif self.moto_2.isappearing:
-                self.moto_2.show()
+            elif self.moto.appearing:
+                self.moto.move()
         else:
-            self.moto_2.show()
+            self.moto.move()
+
+        # Checks if the self.moto2 is colliding with the other TronMoto
+        if self.moto.appearing:
+            # moto2 will be "destroyed"
+            if self.moto2.colliding(self.moto) == True:
+                self.explosion_sound.play(0)
+                self.moto2.explode()
+                self.moto2.lives -= 1
+                self.moto2.appearing = False
+                
+                self.win()
+                self.moto.move()
+                self.show_status()
+                
+            elif self.moto2.appearing:
+                self.moto2.move()
+        else:
+            self.moto2.move()
     #
 
-    def eating(self):
-        """
-        This function is called every loop game to change the speed of the motos,
-        in case they acquire power (apples)
-        """
-        if self.moto.collides(self.apple):
-            if self.moto.step < 6:
-                self.moto.acceleration += 2
-                self.moto.step += self.moto.acceleration
-            else:
-                self.moto.step -= self.moto.acceleration
-                self.moto.acceleration = 0
-                
-            self.apple.generate()
-            self.apple.appear()
+    def show_status(self):
+        winning_player = ''
+        msg = ''
+        
+        if self.moto.lives != self.moto2.lives:
+            if self.moto.lives > self.moto2.lives:
+                winning_player = self.moto.name
+            elif self.moto2.lives > self.moto.lives:
+                winning_player = self.moto2.name
+            msg = winning_player + " is winning!"
+        else:
+            msg = 'Nobody is winning!'
 
-        if self.moto_2.collides(self.apple):
-            
-            if self.moto_2.step < 6:
-                self.moto_2.acceleration += 2
-                self.moto_2.step += self.moto_2.acceleration
-            else:
-                self.moto_2.step -= self.moto_2.acceleration
-                self.moto_2.acceleration = 0
-                
-            self.apple.generate()
-            self.apple.appear()
+        size = 30
+        pos = self.board.get_middle_coords(msg, size)
+
+        self.reset()
+        
+        self.board.write(msg, WHITE)
+        pygame.display.update()
+        
+        pygame.time.wait(1000)
+
     #
     
-    def gameover(self):
+    def gameover(self, winner):
         """Game is over. You can start again or quit"""
         game_over = True
-        self.board.write("Game over, press C to play again or Q to quit", WHITE)
+
+        msg = "Congratulations " + winner.name + ", you won!"
+        size = 40
+        pos = self.board.get_middle_coords(msg, size)
+        self.board.write(msg, WHITE, (pos[0], pos[1] - 110), size)
+
+
+        msg = "Press C to play again or Q to quit"
+        size = 25
+        pos = self.board.get_middle_coords(msg, size)
+        self.board.write(msg, WHITE, (pos[0], pos[1]), size)
+        
         pygame.display.update()
+        
         while game_over:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -419,23 +547,33 @@ class TronGrid:
                         pygame.quit()
                         quit()
                     elif event.key == pygame.K_c:
-                        self.reset()
+                        self.restart()
+                        
                         game_over == False
                         self.run()
     #
     
-    def score(self, score, player, pos=(10, 10)):
-        """Changes the score of the players"""
+    def set_score(self, score, player, pos=(10, 10)):
+        """Changes the set_score of the players"""
         self.board.write(player + ': ' + str(score), WHITE, pos)
     #
-    
+
+    def win(self):
+        """If there's a winner, it will be passed to the self.gameover method."""
+        if self.moto.lives == 0:
+            self.gameover(self.moto2) 
+        if self.moto2.lives == 0:
+            self.gameover(self.moto)
+
     def run(self):
         """Main function of the whole game, specifically of the TronGrid class."""
-        
         running = True
         
+        # generates and shows first power up objects
         self.apple.generate()
         self.apple.appear()
+        self.kiwi.generate()
+        self.kiwi.appear()
 
         self.explosion_sound = pygame.mixer.Sound('sounds/explosion.aiff')
         ## self.game_music = pygame.mixer.Sound('backgroun_music_path')
@@ -450,41 +588,41 @@ class TronGrid:
                     
                 if event.type == pygame.KEYDOWN:
                     self.moto.previous_direction = self.moto.direction
-                    self.moto_2.previous_direction = self.moto_2.direction
+                    self.moto2.previous_direction = self.moto2.direction
 
                     # managing the first moto movement
                     if event.key == pygame.K_a and self.moto.previous_direction != 'right':
                         self.moto.set_direction('left')
-                        self.moto.set_speed((-self.moto.step, 0))
+                        self.moto.set_position((-self.moto.step, 0))
                         
                     elif event.key == pygame.K_d and self.moto.previous_direction != 'left':
                         self.moto.set_direction('right')
-                        self.moto.set_speed((self.moto.step, 0))
+                        self.moto.set_position((self.moto.step, 0))
                         
                     elif event.key == pygame.K_w and self.moto.previous_direction != 'down':
                         self.moto.set_direction('up')
-                        self.moto.set_speed((0, -self.moto.step))
-                        
+                        self.moto.set_position((0, -self.moto.step))
+                    
                     elif event.key == pygame.K_s and self.moto.previous_direction != 'up':
                         self.moto.set_direction('down')
-                        self.moto.set_speed((0, self.moto.step))
+                        self.moto.set_position((0, self.moto.step))
 
                     # managing the second moto movement
-                    if event.key == pygame.K_LEFT and self.moto_2.previous_direction != 'right':
-                        self.moto_2.set_direction('left')
-                        self.moto_2.set_speed((-self.moto_2.step, 0))
+                    if event.key == pygame.K_LEFT and self.moto2.previous_direction != 'right':
+                        self.moto2.set_direction('left')
+                        self.moto2.set_position((-self.moto2.step, 0))
                         
-                    elif event.key == pygame.K_RIGHT and self.moto_2.previous_direction != 'left':
-                        self.moto_2.set_direction('right')
-                        self.moto_2.set_speed((self.moto_2.step, 0))
+                    elif event.key == pygame.K_RIGHT and self.moto2.previous_direction != 'left':
+                        self.moto2.set_direction('right')
+                        self.moto2.set_position((self.moto2.step, 0))
                         
-                    elif event.key == pygame.K_UP and self.moto_2.previous_direction != 'down':
-                        self.moto_2.set_direction('up')
-                        self.moto_2.set_speed((0, -self.moto_2.step))
+                    elif event.key == pygame.K_UP and self.moto2.previous_direction != 'down':
+                        self.moto2.set_direction('up')
+                        self.moto2.set_position((0, -self.moto2.step))
                         
-                    elif event.key == pygame.K_DOWN and self.moto_2.previous_direction != 'up':
-                        self.moto_2.set_direction('down')
-                        self.moto_2.set_speed((0, self.moto_2.step))
+                    elif event.key == pygame.K_DOWN and self.moto2.previous_direction != 'up':
+                        self.moto2.set_direction('down')
+                        self.moto2.set_position((0, self.moto2.step))
 
                     # pause
                     if event.key == pygame.K_p:
@@ -492,36 +630,36 @@ class TronGrid:
  
             # end for
             
-            # managing when you go through the walls
-            self.moto.pass_through_walls()
-            self.moto_2.pass_through_walls()
-            
             # moving the moto
-            self.moto.move()
-            self.moto_2.move()
+            self.moto.update_pos()
+            self.moto2.update_pos()
 
             # updating the board: color and image
             self.board.update() 
 
-            # updating trail of the motorcycles
-            self.moto.update()
-            self.moto_2.update()
-
-            self.check_collisions()
+            self.manage_collisions()
 
             # make another apple appears
             self.apple.appear()
+            self.kiwi.appear()
+            
+            # setting the set_score of the 2 players
+            self.set_score(self.moto.lives, 'P1')
+            self.set_score(self.moto2.lives, 'P2', pos=(self.board.width - 72, 10))
 
-            # setting the score of the 2 players
-            self.score(self.moto.lives, 'P1')
-            self.score(self.moto_2.lives, 'P2', pos=(self.board.width - 72, 10))
+            # checking if self.moto is hitting some power
+            self.moto.get_power(self.apple)
+            self.moto.get_power(self.kiwi)
 
-            self.eating() # if you eat an 'apple' your speed increases.
-    
+            # checking if self.moto2 is doing the same thing
+            self.moto2.get_power(self.apple)
+            self.moto2.get_power(self.kiwi)
+            
+            # setting the clock frame rate and updating the display
             self.clock.tick(self.FPS)
             pygame.display.update()
     #
-
-#
+    
+# end TronGrid
 
 tron_grid = TronGrid() # TronGrid object := starts all the game
