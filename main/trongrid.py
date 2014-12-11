@@ -610,7 +610,7 @@ class TronGrid:
 
     def win(self):
         """If there's a winner, it will be passed to the self.gameover method."""
-        if self.moto.lives == 0 and self.moto.lives == 0:
+        if self.moto.lives == 0 and self.moto2.lives == 0:
             self.gameover(TronMoto.BOTH)
         if self.moto.lives == 0:
             self.gameover(self.moto2) 
@@ -642,7 +642,7 @@ class TronGrid:
                     self.moto.previous_direction = self.moto.direction
                     self.moto2.previous_direction = self.moto2.direction
 
-                    # FIRST PLAYER (MOVEMENT)
+                     # FIRST PLAYER (MOVEMENT)
                     if event.key == pygame.K_a and self.moto.previous_direction != 'right':
                         self.moto.set_direction('left')
                         self.moto.set_position((-self.moto.step, 0))
