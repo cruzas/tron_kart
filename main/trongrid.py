@@ -684,7 +684,7 @@ class TronGrid:
                         self.moto2.set_direction('down')
                         self.moto2.set_position((0, self.moto2.step))
                     elif event.key == pygame.K_RSHIFT:
-                        self.moto2.stop()#####################
+                        self.moto2.stop()
                         
 
                     # pause
