@@ -13,7 +13,7 @@ def get_file_names(path, pattern, t=1):
 2 = 'pattern' is in the name of the file
 """
     os.chdir(path) # changes the present current directory
-    file_names = [] # will hold eventually the files name that contain patthern
+    file_names = [] # will hold eventually the files name (in path) that contain 'pattern'
     for file in os.listdir(os.getcwd()):
             if t == 0:
                 if file.startswith(pattern):
@@ -27,6 +27,7 @@ def get_file_names(path, pattern, t=1):
     return file_names
 #
 
+# Define here the path to the folder and the pattern 
 path = "sounds/"
 pattern = ".mp3"
 
