@@ -396,7 +396,8 @@ class TronGrid:
         
         pygame.init()
         pygame.mixer.init()
-        
+
+        self.timer = TronTimer(100)
         self.title = title
         self.clock = pygame.time.Clock()
         self.board = TronBoard((800, 450), WHITE, 'images/board2.jpg', self.title)
@@ -404,6 +405,7 @@ class TronGrid:
 
         # PLAYERS
         self.img_path = 'images/tron.png'
+        self.img_path2 = 'images/tron2.png'
 
         # first player
         self.moto_size = (28, 28)
@@ -412,7 +414,7 @@ class TronGrid:
 
         # second player
         self.pos_2 = (self.board.resolution[0] - 100, self.board.resolution[1]/2)
-        self.moto2 = TronMoto(self.board.surface, "Bill Logical Gate", TronMoto.LIVES, self.img_path, self.pos_2, piece_color=TRON_O)
+        self.moto2 = TronMoto(self.board.surface, "Bill Logical Gate", TronMoto.LIVES, self.img_path2, self.pos_2, piece_color=TRON_O)
         
         # POWER
         self.food_img_1 = 'images/random.png'
@@ -430,13 +432,13 @@ class TronGrid:
         """Reset the background and the position of the 2 motos."""
         self.board.update()
         self.moto = TronMoto(self.board.surface, self.moto.name, self.moto.lives, self.img_path, self.pos, piece_color=TRON_Y)
-        self.moto2 = TronMoto(self.board.surface, self.moto2.name, self.moto2.lives, self.img_path, self.pos_2, piece_color=TRON_O)
+        self.moto2 = TronMoto(self.board.surface, self.moto2.name, self.moto2.lives, self.img_path2, self.pos_2, piece_color=TRON_O)
     #
 
     def restart(self, name='Mr. Weed', name2='Bush, The Laden'):
         self.board.update()
         self.moto = TronMoto(self.board.surface, name, TronMoto.LIVES, self.img_path, self.pos, piece_color=TRON_Y)
-        self.moto2 = TronMoto(self.board.surface, name2, TronMoto.LIVES, self.img_path, self.pos_2, piece_color=TRON_O)
+        self.moto2 = TronMoto(self.board.surface, name2, TronMoto.LIVES, self.img_path2, self.pos_2, piece_color=TRON_O)
         
 
     def pause(self):
@@ -645,18 +647,22 @@ class TronGrid:
                      # FIRST PLAYER (MOVEMENT)
                     if event.key == pygame.K_a and self.moto.previous_direction != 'right':
                         self.moto.set_direction('left')
+                        self.movement = 'left'
                         self.moto.set_position((-self.moto.step, 0))
                         
                     elif event.key == pygame.K_d and self.moto.previous_direction != 'left':
                         self.moto.set_direction('right')
+                        self.movement = 'right'
                         self.moto.set_position((self.moto.step, 0))
                         
                     elif event.key == pygame.K_w and self.moto.previous_direction != 'down':
                         self.moto.set_direction('up')
+                        self.movement = 'up'
                         self.moto.set_position((0, -self.moto.step))
                     
                     elif event.key == pygame.K_s and self.moto.previous_direction != 'up':
                         self.moto.set_direction('down')
+                        self.movement = 'down'
                         self.moto.set_position((0, self.moto.step))
                     elif event.key == pygame.K_e:
                         self.moto.stop()
@@ -678,7 +684,7 @@ class TronGrid:
                         self.moto2.set_direction('down')
                         self.moto2.set_position((0, self.moto2.step))
                     elif event.key == pygame.K_RSHIFT:
-                        self.moto2.stop()
+                        self.moto2.stop()#####################
                         
 
                     # pause
