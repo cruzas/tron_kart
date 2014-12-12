@@ -12,9 +12,8 @@ def get_file_names(path, pattern, t=1):
 1 = if 'pattern' is at the end;
 2 = 'pattern' is in the name of the file
 """
-    os.chdir(path) # changes the present current directory
     file_names = [] # will hold eventually the files name (in path) that contain 'pattern'
-    for file in os.listdir(os.getcwd()):
+    for file in os.listdir(path):
             if t == 0:
                 if file.startswith(pattern):
                     file_names.append(file)
@@ -24,7 +23,6 @@ def get_file_names(path, pattern, t=1):
             if t == 2:
                 if pattern in file:
                     file_names.append(file)
-    os.chdir('..')
     return file_names
 #
 
