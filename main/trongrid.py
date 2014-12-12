@@ -472,7 +472,8 @@ class TronGrid:
         self.apple = TFood(self.board.surface, self.food_img_1, TFood.powers[0])
         self.kiwi = TFood(self.board.surface, self.food_img_2, TFood.powers[1])
 
-        # SOUNDS
+        # SOUNDS TO MAKE THE PLAYER SELECT THE MUSIC MAKE A VARIABLE WICH TAKES A NUMBER
+        # FROM 0 TO THE NUMBER OF SONGS-1 AND PUT IT IN SELF_CHOICE INSTEAD OF THE RANDOM
         self.music_list = get_file_names('sounds/background/', '.aiff')
         self.choice = random.randint(0,1) #numbers from 0 to number of music files-1
         self.music = 'sounds/background/' + self.music_list[self.choice]
