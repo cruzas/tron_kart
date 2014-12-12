@@ -455,6 +455,7 @@ class TronGrid:
         self.players_list = get_file_names('images/players/', '.png')
         self.players_choice = random.randint(0,len(self.players_list)-1)
         self.img_path = 'images/players/' + self.players_list[self.players_choice]########################
+        self.players_list.pop(self.players_choice)
         self.players_choice = random.randint(0,len(self.players_list)-1)
         self.img_path2 = 'images/players/' + self.players_list[self.players_choice]
 
