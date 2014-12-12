@@ -42,7 +42,7 @@ class TronTimer:
     #
     
     def stop(self):
-        self.started = False ### Is this (-) a mistake? Yes it was
+        self.started = False
         self.finished = False
         self.t = 0
     #
@@ -144,13 +144,14 @@ class TMoto:
     #
 
     def crashing(self, moto):
-        """This method returns 3 possible values:
-    0 = 'self' does NOT collide with 'moto';
-    1 = 'self' collides with 'moto';
-    2 = 'self' and 'moto' collide both;
-The method calls colliding (which calls 'collides') to verify it there's a collision
-The method is also responsible for calling 'explode' and reduce 'lives', if a collision occurs.
-"""
+        """
+        This method returns 3 possible values:
+        0 = 'self' does NOT collide with 'moto';
+        1 = 'self' collides with 'moto';
+        2 = 'self' and 'moto' collide both;
+        The method calls colliding (which calls 'collides') to verify it there's a collision
+        The method is also responsible for calling 'explode' and reduce 'lives', if a collision occurs.
+        """
         # YES
         if self.colliding(moto) == TMoto.STATUS[1]:
             self.explosion_sound.play(0)
