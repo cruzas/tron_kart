@@ -9,6 +9,8 @@ import random
 import sys
 import eztext
 
+#            
+
 class TronTimer:
     """This class should only be used for this project.
     It simulates a Timer that has to be used inside a while or for loop.
@@ -24,6 +26,7 @@ class TronTimer:
     def start(self):
         self.stop()
         self.started = True
+        
     #
     
     def inc(self):
@@ -38,7 +41,7 @@ class TronTimer:
     #
     
     def stop(self):
-        self.started - False
+        self.started = False ### Is this (-) a mistake? Yes it was
         self.finished = False
         self.t = 0
     #
@@ -53,6 +56,7 @@ class TMoto:
     
     STATUS = [0, 1, 2] # collision status: 0=NO, 1=YES, 2=BOTH
     MAX_LIVES = 3
+    
 
     def __init__(self, surface, name, lives, img_path, pos, piece_color, piece_image, size=(30, 30), piece_size=(4, 4), direction='', length=60):
         self.timer = TronTimer(100) # 100 is the amount of "time" that has to pass
@@ -534,6 +538,7 @@ class TronGrid:
         
         pygame.display.update()        
         pygame.time.wait(1000)
+        
     #
     
     def gameover(self, winner):
