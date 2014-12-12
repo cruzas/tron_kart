@@ -279,17 +279,13 @@ The method is also responsible for calling 'explode' and reduce 'lives', if a co
         if self.direction == 'right':
             if self.previous_direction == 'left':
                 self.image = pygame.transform.rotate(self.image, 180)
-            elif self.previous_direction == 'right':
-                self.image = pygame.transform.rotate(self.image, 0)
             elif self.previous_direction == 'up':
                 self.image = pygame.transform.rotate(self.image, 270)
             elif self.previous_direction == 'down':
                 self.image = pygame.transform.rotate(self.image, 90)
 
         elif self.direction == 'left':
-            if self.previous_direction == 'left':
-                self.image = pygame.transform.rotate(self.image, 0)
-            elif self.previous_direction == 'right':
+            if self.previous_direction == 'right':
                 self.image = pygame.transform.rotate(self.image, 180)
             elif self.previous_direction == 'up':
                 self.image = pygame.transform.rotate(self.image, 90)
@@ -301,8 +297,6 @@ The method is also responsible for calling 'explode' and reduce 'lives', if a co
                 self.image = pygame.transform.rotate(self.image, 270)
             elif self.previous_direction == 'right':
                 self.image = pygame.transform.rotate(self.image, 90)
-            elif self.previous_direction == 'up':
-                self.image = pygame.transform.rotate(self.image, 0)
             elif self.previous_direction == 'down':
                 self.image = pygame.transform.rotate(self.image, 180)
 
@@ -313,8 +307,6 @@ The method is also responsible for calling 'explode' and reduce 'lives', if a co
                 self.image = pygame.transform.rotate(self.image, 270)
             elif self.previous_direction == 'up':
                 self.image = pygame.transform.rotate(self.image, 180)
-            elif self.previous_direction == 'down':
-                self.image = pygame.transform.rotate(self.image, 0)
                 
         self.previous_direction = self.direction
         
@@ -496,13 +488,13 @@ class TronGrid:
         """Reset the background and the position of the 2 motos."""
         self.board.update()
         self.moto = TMoto(self.board.surface, self.moto.name, self.moto.lives, self.img_path, self.pos, TRON_Y, self.moto.piece_image)
-        self.moto2 = TMoto(self.board.surface, self.moto2.name, self.moto2.lives, self.img_path, self.pos_2, TRON_O, self.moto2.piece_image)
+        self.moto2 = TMoto(self.board.surface, self.moto2.name, self.moto2.lives, self.img_path2, self.pos_2, TRON_O, self.moto2.piece_image)
     #
 
     def restart(self, name='Mr. Weed', name2='Bush, The Laden'):
         self.board.update()
         self.moto = TMoto(self.board.surface, name, TMoto.MAX_LIVES, self.img_path, self.pos, TRON_Y, self.moto.piece_image)
-        self.moto2 = TMoto(self.board.surface, name2, TMoto.MAX_LIVES, self.img_path, self.pos_2, TRON_O, self.moto2.piece_image)
+        self.moto2 = TMoto(self.board.surface, name2, TMoto.MAX_LIVES, self.img_path2, self.pos_2, TRON_O, self.moto2.piece_image)
     #
 
     def pause(self):
