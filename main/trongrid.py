@@ -26,8 +26,7 @@ class TronTimer:
     
     def start(self):
         self.stop()
-        self.started = True
-        
+        self.started = True        
     #
     
     def inc(self):
@@ -443,7 +442,7 @@ class TronGrid:
         pygame.init()
         pygame.mixer.init()
 
-        self.timer = TronTimer(100)
+        self.timer = TronTimer(200)
 
         self.title = title
         self.clock = pygame.time.Clock()
@@ -472,8 +471,8 @@ class TronGrid:
         self.moto2 = TMoto(self.board.surface, "Bill Logical Gate", TMoto.MAX_LIVES, self.img_path2, self.pos_2, TRON_O, self.piece_img)
 
         # POWER
-        self.food_img_1 = 'images/random.png'
-        self.food_img_2 = 'images/random2.png'
+        self.food_img_1 = 'images/speed_up.png'
+        self.food_img_2 = 'images/random_blue.png'
 
         self.apple = TFood(self.board.surface, self.food_img_1, TFood.powers[0])
         self.kiwi = TFood(self.board.surface, self.food_img_2, TFood.powers[1])
