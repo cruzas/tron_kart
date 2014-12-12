@@ -476,7 +476,7 @@ class TronGrid:
         self.img_path2 = 'images/players/' + self.players_list[self.players_choice]
 
         # THIS VARIABLE IS NOT USED YET
-        self.piece_img = 'images/tails_pieces/blue.png'
+        self.piece_img = 'images/trails_pieces/blue.png'
 
         # FIRST PLAYER SETUP
         self.moto_size = (28, 28)
