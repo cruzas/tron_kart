@@ -97,6 +97,7 @@ class TMoto:
         # holds the pieces of the trail
         self.trail = []
         self.length = length
+        self.starting_lenght = length
 
         # creating a list with images for the explosions
         self.explo_paths = ['images/explosion/explo0.png', 'images/explosion/explo1.png', 'images/explosion/explo2.png']
@@ -226,17 +227,21 @@ The method is also responsible for calling 'explode' and reduce 'lives', if a co
         # iff the timer has already finished.
         if self.timer.ringing():
             # If SPEED power is active and 'obj' is of that type of power
-            if self.powered[0] and obj.power == TFood.powers[0]:
+            if self.powered[0]: 
                 self.step -= self.INC
+                self.length = self.starting_lenght
+                self.powered[0] = False
+                self.powered[1] = False
                 self.timer.stop()
-                self.powered[0] = False # We are no more powered by self.powered[0]
 
             # If SIZE power is active and 'obj' is of that type of power                
-            elif self.powered[1] and obj.power == TFood.powers[1]:                
-                self.length = round(self.length / 2)
-                self.timer.stop()
+            elif self.powered[1]:                
+                self.length = self.starting_lenght
                 self.powered[1] = False
+                self.powered[0] = False
+                self.timer.stop()
                 self.update_trail()
+                self.timer.stop()
                 
             self.proceed()
 
