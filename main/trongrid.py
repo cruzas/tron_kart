@@ -476,7 +476,7 @@ class TronGrid:
         # SOUNDS TO MAKE THE PLAYER SELECT THE MUSIC MAKE A VARIABLE WICH TAKES A NUMBER
         # FROM 0 TO THE NUMBER OF SONGS-1 AND PUT IT IN SELF_CHOICE INSTEAD OF THE RANDOM
         self.music_list = get_file_names('sounds/background/', '.aiff')
-        self.choice = random.randint(0,1) #numbers from 0 to number of music files-1
+        self.choice = random.randint(0,len(self.music_list)-1) #numbers from 0 to number of music files-1
         self.music = 'sounds/background/' + self.music_list[self.choice]
         self.explosion_sound = pygame.mixer.Sound('sounds/explosion.aiff')
         self.game_music = pygame.mixer.Sound(self.music)
