@@ -24,16 +24,17 @@ def get_file_names(path, pattern, t=1):
             if t == 2:
                 if pattern in file:
                     file_names.append(file)
+    os.chdir('..')
     return file_names
 #
 
 # Define here the path to the folder and the pattern 
-path = "sounds/"
-pattern = ".mp3"
-
-def test():
-    fnames = get_file_names(path, pattern)
-    print(fnames)
-#
-
-test()
+##path = "sounds/"
+##pattern = ".mp3"
+##
+##def test():
+##    fnames = get_file_names(path, pattern)
+##    print(fnames)
+###
+##
+##test()

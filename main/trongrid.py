@@ -6,7 +6,7 @@ Other classes should be found in other files
 from colors import *
 import pygame
 import random
-
+from get_file_names import get_file_names
 
 class TronTimer:
     """This class should only be used for this project.
@@ -629,10 +629,12 @@ class TronGrid:
         self.kiwi.generate()
         self.kiwi.appear()
 
+        self.music_list = get_file_names('sounds/', 'music', 0)
+        self.choice = random.randint(0,1)
+        self.music = 'sounds/' + self.music_list[self.choice]
         self.explosion_sound = pygame.mixer.Sound('sounds/explosion.aiff')
-        self.game_music = pygame.mixer.Sound('sounds/music.aiff')
+        self.game_music = pygame.mixer.Sound(self.music)
         self.game_music.play(-1)
- #       self.game_music.queue()
         while running:
 
             for event in pygame.event.get():
