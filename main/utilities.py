@@ -1,13 +1,14 @@
 """
-Get name of files/folders in a certain directory with a certain pattern.
-
-@author: Nelson Dos Santos
+USE THIS FILE TO WRITE 'UTILITY' FUNCTIONS!
 """
 
 import os
 
 def get_file_names(path, pattern, t=1):
-    """t represents the position in the file name where to search pattern:
+    """Get name of files/folders in a certain directory with a certain pattern.
+@author: Nelson Dos Santos
+
+t represents the position in the file name where to search pattern:
 0 = if the file name starts with 'pattern';
 1 = if 'pattern' is at the end;
 2 = 'pattern' is in the name of the file

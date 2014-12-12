@@ -6,9 +6,8 @@ Other classes should be found in other files
 from colors import *
 import pygame
 import random
-from get_file_names import get_file_names
+from utilities import get_file_names
 import sys
-import eztext
 
 #            
 
@@ -25,11 +24,13 @@ class TronTimer:
     #
     
     def start(self):
+        """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
         self.stop()
         self.started = True        
     #
     
     def inc(self):
+        """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
         if self.started:
             if self.t >= self.max:
                 self.finished = True
@@ -37,10 +38,12 @@ class TronTimer:
                 self.t += 1
 
     def ringing(self):
+        """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
         return self.finished
     #
     
     def stop(self):
+        """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
         self.started = False
         self.finished = False
         self.t = 0
@@ -56,9 +59,9 @@ class TMoto:
     
     STATUS = [0, 1, 2] # collision status: 0=NO, 1=YES, 2=BOTH
     MAX_LIVES = 3
-    
 
     def __init__(self, surface, name, lives, img_path, pos, piece_color, piece_image, size=(30, 30), piece_size=(4, 4), direction='', length=60):
+        """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
         self.timer = TronTimer(100) # 100 is the amount of "time" that has to pass
         self.explosion_sound = pygame.mixer.Sound('sounds/explosion.aiff')
 
@@ -111,6 +114,7 @@ class TMoto:
     #
 
     def explode(self):
+        """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
         for status in self.explosion:
             self.surface.blit(status, (self.x, self.y))
             pygame.display.update()
@@ -118,15 +122,18 @@ class TMoto:
     #
 
     def set_direction(self, direction):
+        """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
         self.direction = direction
     #
 
     def set_position(self, step):
+        """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
         self.x_step = step[0]
         self.y_step = step[1]
     #
 
     def collides(self, rect):
+        """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
         if self.rect.colliderect(rect):
             return True
         else:
@@ -134,6 +141,7 @@ class TMoto:
     #
     
     def colliding(self, moto):
+        """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
         for x in moto.trail[0:-1]:
             if self.collides(x):
                 return TMoto.STATUS[1]
@@ -143,8 +151,7 @@ class TMoto:
     #
 
     def crashing(self, moto):
-        """
-        This method returns 3 possible values:
+        """This method returns 3 possible values:
         0 = 'self' does NOT collide with 'moto';
         1 = 'self' collides with 'moto';
         2 = 'self' and 'moto' collide both;
@@ -175,11 +182,12 @@ class TMoto:
     #           
 
     def update_rect(self):
+        """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
         self.rect = pygame.rect.Rect(self.x-12, self.y-12, self.size[0], self.size[1])
     #
 
     def update_pos(self):
-         # managing when you go through the walls
+        """managing when you go through the walls"""
         self.pass_through_walls()
         self.x += self.x_step
         self.y += self.y_step
@@ -187,6 +195,7 @@ class TMoto:
     #
     
     def stop(self):
+        """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
         self.x_step = self.y_step = 0
     #
 
@@ -198,6 +207,7 @@ class TMoto:
     #
 
     def pass_through_walls(self):
+        """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
         if self.x >= self.surface.get_rect()[2]:
             self.x = 0
         if self.x < 0:
@@ -222,7 +232,7 @@ class TMoto:
     #
      
     def get_power_from(self, obj):
-
+        """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
         # We want to establish normal 'self.step' or 'self.length',
         # iff the timer has already finished.
         if self.timer.ringing():
@@ -273,7 +283,7 @@ class TMoto:
     #
             
     def move(self):
-        '''Changes the directions of the TMoto'''
+        """Changes the directions of the TMoto"""
         self.update_trail()
         
         if self.direction == 'right':
@@ -325,6 +335,7 @@ class TBoard:
     """This class represents the board of a TronGrid object."""
     
     def __init__(self, resolution, color, image_path, title='TBoard'):
+        """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
         self.title = title
         self.resolution = resolution
         self.width = resolution[0]
@@ -345,6 +356,7 @@ class TBoard:
     #        
 
     def update(self):
+        """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
         self.surface.fill(self.color)
         if self.using_img:
             self.surface.blit(self.image, (0, 0))
@@ -359,6 +371,7 @@ class TBoard:
     #
 
     def get_score_coords(self, msg, font_size, side="RIGHT", board_distance=10, bold=False, italic=False):
+        """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
         font = pygame.font.SysFont(None, font_size, bold, italic)
         text = font.render(msg, True, (0, 0, 0))
         rect = text.get_rect()
@@ -393,7 +406,7 @@ class TFood:
     powers = ["SPEED", "SIZE"]
     
     def __init__(self, surface, img_path, power, size=(30, 30), name=''):
-
+        """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
         if power not in TFood.powers:
             raise ValueError('power has not a correct value')
         
@@ -413,16 +426,19 @@ class TFood:
     #
     
     def update_rect(self):
+        """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
         self.rect = pygame.rect.Rect(self.x, self.y, self.width, self.height)
     #
     
     def generate(self):
+        """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
         self.x = round(random.randrange(0, self.surface.get_rect()[2] - self.width))
         self.y = round(random.randrange(0, self.surface.get_rect()[3] - self.height))
         self.update_rect()
     #
     
     def appear(self):
+        """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
         self.surface.blit(self.image, (self.x, self.y))
     #
     
@@ -447,32 +463,33 @@ class TronGrid:
         self.title = title
         self.clock = pygame.time.Clock()
         
-        self.board = TBoard((800, 450), WHITE, 'images/board2.jpg', self.title)
+        self.board = TBoard((800, 450), WHITE, 'images/boards/board1.jpg', self.title)
         self.FPS = 60
 
         # PLAYERS: TO MAKE THE PLAYER SELECT THE IMAGE MAKE A VARIABLE WICH TAKES A NUMBER
         # FROM 0 TO THE NUMBER OF IMAGES-1 AND PUT IT IN SELF_PLAYERS_CHOICE INSTEAD OF THE RANDOM
         self.players_list = get_file_names('images/players/', '.png')
-        self.players_choice = random.randint(0,len(self.players_list)-1)
+        self.players_choice = random.randint(0, len(self.players_list)-1)
         self.img_path = 'images/players/' + self.players_list[self.players_choice]
         self.players_list.pop(self.players_choice)
-        self.players_choice = random.randint(0,len(self.players_list)-1)
+        self.players_choice = random.randint(0, len(self.players_list)-1)
         self.img_path2 = 'images/players/' + self.players_list[self.players_choice]
 
-        self.piece_img = 'images/blue.png'
-        # first player
-        
+        # THIS VARIABLE IS NOT USED YET
+        self.piece_img = 'images/tails_pieces/blue.png'
+
+        # FIRST PLAYER SETUP
         self.moto_size = (28, 28)
         self.pos = (100, self.board.resolution[1]/2)
         self.moto = TMoto(self.board.surface, "Kill Bill (S. Jobs)", TMoto.MAX_LIVES, self.img_path, self.pos, TRON_Y, self.piece_img)
 
-        # second player
+        # SECOND PLAYER SETUP
         self.pos_2 = (self.board.resolution[0] - 100, self.board.resolution[1]/2)
         self.moto2 = TMoto(self.board.surface, "Bill Logical Gate", TMoto.MAX_LIVES, self.img_path2, self.pos_2, TRON_O, self.piece_img)
 
         # POWER
-        self.food_img_1 = 'images/speed_up.png'
-        self.food_img_2 = 'images/random_blue.png'
+        self.food_img_1 = 'images/powerups/speed_up.png'
+        self.food_img_2 = 'images/powerups/tail_inc.png'
 
         self.apple = TFood(self.board.surface, self.food_img_1, TFood.powers[0])
         self.kiwi = TFood(self.board.surface, self.food_img_2, TFood.powers[1])
@@ -498,6 +515,7 @@ class TronGrid:
     #
 
     def restart(self, name='Mr. Weed', name2='Bush, The Laden'):
+        """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
         self.board.update()
         self.moto = TMoto(self.board.surface, name, TMoto.MAX_LIVES, self.img_path, self.pos, TRON_Y, self.moto.piece_image)
         self.moto2 = TMoto(self.board.surface, name2, TMoto.MAX_LIVES, self.img_path2, self.pos_2, TRON_O, self.moto2.piece_image)
@@ -534,6 +552,7 @@ class TronGrid:
     #
 
     def show_status(self):
+        """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
         winning_player = ''
         msg = ''
         if self.moto.lives != self.moto2.lives:
@@ -616,6 +635,7 @@ class TronGrid:
     #
 
     def winner(self):
+        """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
         if self.moto.lives == 0 or self.moto2.lives == 0:
             return True
         return False
@@ -726,7 +746,6 @@ class TronGrid:
             self.clock.tick(self.FPS)
             pygame.display.update()
     #
-
     
 # end TronGrid
 
