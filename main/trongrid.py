@@ -451,10 +451,11 @@ class TronGrid:
         self.board = TBoard((800, 450), WHITE, 'images/board2.jpg', self.title)
         self.FPS = 60
 
-        # PLAYERS
+        # PLAYERS TO MAKE THE PLAYER SELECT THE IMAGE MAKE A VARIABLE WICH TAKES A NUMBER
+        # FROM 0 TO THE NUMBER OF IMAGES-1 AND PUT IT IN SELF_PLAYERS_CHOICE INSTEAD OF THE RANDOM
         self.players_list = get_file_names('images/players/', '.png')
         self.players_choice = random.randint(0,len(self.players_list)-1)
-        self.img_path = 'images/players/' + self.players_list[self.players_choice]########################
+        self.img_path = 'images/players/' + self.players_list[self.players_choice]
         self.players_list.pop(self.players_choice)
         self.players_choice = random.randint(0,len(self.players_list)-1)
         self.img_path2 = 'images/players/' + self.players_list[self.players_choice]
@@ -478,7 +479,7 @@ class TronGrid:
         self.kiwi = TFood(self.board.surface, self.food_img_2, TFood.powers[1])
 
         # SOUNDS TO MAKE THE PLAYER SELECT THE MUSIC MAKE A VARIABLE WICH TAKES A NUMBER
-        # FROM 0 TO THE NUMBER OF SONGS-1 AND PUT IT IN SELF_CHOICE INSTEAD OF THE RANDOM
+        # FROM 0 TO THE NUMBER OF SONGS-1 AND PUT IT IN SELF_MUSIC_CHOICE INSTEAD OF THE RANDOM
         self.music_list = get_file_names('sounds/background/', '.aiff')
         self.music_choice = random.randint(0,len(self.music_list)-1) #numbers from 0 to number of music files-1
         self.music = 'sounds/background/' + self.music_list[self.music_choice]
