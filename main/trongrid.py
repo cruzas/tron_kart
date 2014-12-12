@@ -251,11 +251,17 @@ The method is also responsible for calling 'explode' and reduce 'lives', if a co
                 self.powered[0] = True
                 self.step += self.INC
                 self.timer.start()
+            if obj.power == TFood.powers[0] and self.powered[0]:
+                    self.timer.stop()
+                    self.timer.start()
             elif obj.power == TFood.powers[1] and not self.powered[1]:
                 self.powered[1] = True
                 self.length = round(self.length * 2)
                 self.update_trail()
                 self.timer.start()
+            if obj.power == TFood.powers[1] and self.powered[1]:
+                    self.timer.stop()
+                    self.timer.start()
                        
             self.proceed()
                     
