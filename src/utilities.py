@@ -1,13 +1,14 @@
 """
 USE THIS FILE TO WRITE 'UTILITY' FUNCTIONS!
+
+
 """
 
 import os
 
 def get_file_names(path, pattern, t=1):
     """Get name of files/folders in a certain directory with a certain pattern.
-@author: Nelson Dos Santos
-
+   @author: Nelson Dos Santos
 t represents the position in the file name where to search pattern:
 0 = if the file name starts with 'pattern';
 1 = if 'pattern' is at the end;
@@ -26,14 +27,3 @@ t represents the position in the file name where to search pattern:
                     file_names.append(file)
     return file_names
 #
-
-# Define here the path to the folder and the pattern 
-##path = "sounds/"
-##pattern = ".mp3"
-##
-##def test():
-##    fnames = get_file_names(path, pattern)
-##    print(fnames)
-###
-##
-##test()

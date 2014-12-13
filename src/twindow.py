@@ -10,6 +10,7 @@ import tkinter
 import pygame
 import os
 
+
 class TWindow(tkinter.Frame):
     
     """ Docs"""
@@ -53,7 +54,7 @@ class TWindow(tkinter.Frame):
         self.buttons = [self.get_button('Play'), self.get_button('Instructions'), self.get_button('Options')]
 
         # MUSIC
-        self.mouse_over_btn_sound = pygame.mixer.Sound('sounds/buttons/mouse_over_button_sound.wav')
+        self.mouse_over_btn_sound = pygame.mixer.Sound('src/sounds/buttons/mouse_over_button_sound.wav')
 
         
         # WINDOWS SETTINGS
@@ -77,7 +78,7 @@ class TWindow(tkinter.Frame):
     
     def get_title_img(self):
         """ Returns an PhotoImage object for the title"""
-        img = tkinter.PhotoImage(file='tk_logo.gif')
+        img = tkinter.PhotoImage(file='src/images/logos/tk_logo.gif')
         return img
     #
 
@@ -94,29 +95,29 @@ class TWindow(tkinter.Frame):
         self.mouse_over_btn_sound.play()
     #
         
-
     def on_mouse_leave_btn(self, event):
         event.widget.config(font=self.normal_font)
         self.mouse_over_btn_sound.stop()
     #
     
-#
+# end of TWindow
 
 
 class Panel(tkinter.Frame):
     def __init__(self, root, w, h, color='#000'):
         tkinter.Frame.__init__(self, root, width=w, height=h, background=color)
-#
+
+# end of TPanel
 
 def test():
     """ Use this function to test the GUI for the Tron Kart game"""
     root = tkinter.Tk()
     tronwin = TWindow(root, 'Tron Kart')
     root.mainloop()
+    pygame.quit()
 #
-# test()
+#test()
 
-pygame.quit()
 
                      
 
