@@ -2,7 +2,7 @@
 In particular, I would like to thank Samuel Trindade
 for his suggestions for the design of the window :D
 
-@author: Nelson Dos Santos, Sami Rami
+@authors: Nelson Dos Santos, Sami Rami
 """
 
 import tkinter
