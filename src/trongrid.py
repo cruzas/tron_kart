@@ -8,11 +8,11 @@ import random
 import sys
 
 # DO NOT CHANGE THE ORDER OF THE IMPORTS!!!
-from src.utilities import get_file_names
-from src.colors import *
+from src.tutilities import get_file_names
+from src.tcolors import *
 from src.tmoto import * # imports TMoto, TTimer, TFood and pygame
 from src.tboard import TBoard
-from src.twindow import TWindow
+from src.twindow import TWindow, tkinter
 
 
 class TronGrid:
@@ -321,3 +321,13 @@ class TronGrid:
 # end TronGrid
 
 
+class Runner():
+    """Class used just to create objects that create instances of the game."""
+    def __init__(self):
+        root = tkinter.Tk()
+        twin = TWindow(root, 'Tron Kart')
+        root.mainloop()
+
+        # TODO
+        tgrid = TronGrid() # Main object
+#
