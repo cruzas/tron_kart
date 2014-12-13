@@ -2,10 +2,6 @@
 In particular, I would like to thank Samuel Trindade
 for his suggestions for the design of the window :D
 
-I want to thank also my team, who is always suggesting new things,
-from which I learn a lot!
-
-
 @author: Nelson Dos Santos, Sami Rami
 """
 
