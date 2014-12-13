@@ -11,6 +11,7 @@ import pygame
 import os
 
 class TWindow(tkinter.Frame):
+    
     """ Docs"""
     def __init__(self, root, title):
         super(TWindow, self).__init__()
@@ -20,15 +21,15 @@ class TWindow(tkinter.Frame):
 
         # ROOT
         self.root = root
-
         # Tell pygame's SDL window which window ID to use    
         os.environ['SDL_WINDOWID'] = str(self.winfo_id())
-
         # Show the window so it's assigned an ID.
         self.root.update()
 
+        # initilizing pygame modules to have the mixer (maybe I can just import the mixer?)
         pygame.init()
-        
+
+        # WINDOW SETUP
         self.title = title
         self.root.title(self.title)
         self.width = 700
@@ -41,9 +42,7 @@ class TWindow(tkinter.Frame):
 
         # HEAD
         self.title_frame = self.get_panel(self.width, 50, color="black", fill=tkinter.X, expand=False)
-
         self.title_img = self.get_title_img()
-        
         self.title_lab = tkinter.Label(self.title_frame, relief=tkinter.SUNKEN, bg="#000", image=self.title_img)
         self.title_lab.pack(fill=tkinter.BOTH)
 
@@ -69,11 +68,13 @@ class TWindow(tkinter.Frame):
         panel = Panel(self.root, w, h, color)
         panel.pack(fill=fill, expand=expand, pady=pady)
         return panel
+    #
 
     def get_center_coords(self, width, height):
         """ Returns the coordinates to put a root in the middle of the screen"""
         return (int(self.root.winfo_screenwidth()/2 - width/2), int(self.root.winfo_screenheight()/2 - height/2))
-
+    #
+    
     def get_title_img(self):
         """ Returns an PhotoImage object for the title"""
         img = tkinter.PhotoImage(file='tk_logo.gif')
@@ -91,7 +92,6 @@ class TWindow(tkinter.Frame):
     def on_mouse_over_btn(self, event):
         event.widget.config(font=self.over_font)
         self.mouse_over_btn_sound.play()
-        
     #
         
 
@@ -99,7 +99,9 @@ class TWindow(tkinter.Frame):
         event.widget.config(font=self.normal_font)
         self.mouse_over_btn_sound.stop()
     #
+    
 #
+
 
 class Panel(tkinter.Frame):
     def __init__(self, root, w, h, color='#000'):
@@ -111,7 +113,7 @@ def test():
     root = tkinter.Tk()
     tronwin = TWindow(root, 'Tron Kart')
     root.mainloop()
-##
+#
 # test()
 
 pygame.quit()

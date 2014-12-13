@@ -749,7 +749,7 @@ class TronGrid:
     
 # end TronGrid
 
-from intro import *
+from twindow import *
 
 title = 'Tron Kart'
 root = tkinter.Tk()
