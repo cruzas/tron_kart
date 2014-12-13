@@ -749,5 +749,12 @@ class TronGrid:
     
 # end TronGrid
 
+from intro import *
+
+title = 'Tron Kart'
+root = tkinter.Tk()
+twin = TWindow(root, title)
+root.mainloop()
+
 tron_grid = TronGrid() # TronGrid object := starts all the game
 

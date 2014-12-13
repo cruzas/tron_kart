@@ -17,9 +17,6 @@ YELLOW = (255, 255, 0)
 # CYAN = (111, 195, 223)
 
 
-<<<<<<< HEAD
-=======
 # COLORS USED BY TRAILS
 TRON_Y = (245, 245, 10)
 TRON_O = (245, 135, 10)
->>>>>>> FETCH_HEAD
