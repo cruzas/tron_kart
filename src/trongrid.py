@@ -20,11 +20,11 @@ class TronGrid:
 
     SCORE_SIDES = ["LEFT", "RIGHT"]
 
-    def __init__(self, title='Tron Grid'):
+    def __init__(self, title='Tron Kart'):
         """Constructor of the main class"""
         if type(title) != str:
             raise TypeError('title is not a str')
-        
+
         pygame.init()
         pygame.mixer.init()
 
@@ -328,6 +328,7 @@ class Runner():
         twin = TWindow(root, 'Tron Kart')
         root.mainloop()
 
-        # TODO
-        tgrid = TronGrid() # Main object
+        if TWindow.proceed:
+            tgrid = TronGrid()
+    #
 #

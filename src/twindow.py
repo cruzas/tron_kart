@@ -6,13 +6,17 @@ for his suggestions for the design of the window :D
 """
 
 import tkinter
+from tkinter import messagebox
 import pygame
 import os
 
 
 class TWindow(tkinter.Frame):
+
+    """ TWindow is a class specifically created for the Tron Kart game."""
+
+    proceed = True
     
-    """ Docs"""
     def __init__(self, root, title):
         super(TWindow, self).__init__()
         
@@ -24,8 +28,9 @@ class TWindow(tkinter.Frame):
         # Tell pygame's SDL window which window ID to use    
         os.environ['SDL_WINDOWID'] = str(self.winfo_id())
         # Show the window so it's assigned an ID.
-        self.root.update()
-
+        #self.root.update() # show for a moment another small window at the left
+        
+        TWindow.destroyed = False
         # initilizing pygame modules to have the mixer (maybe I can just import the mixer?)
         pygame.init()
 
@@ -34,9 +39,9 @@ class TWindow(tkinter.Frame):
         self.root.title(self.title)
         self.width = 700
         self.height = 480
-        pos = self.get_center_coords(self.width, self.height)
+        self.pos = self.get_center_coords(self.width, self.height)
             
-        self.root.geometry("{0}x{1}+{2}+{3}".format(self.width, self.height, pos[0], pos[1]))
+        self.root.geometry("{0}x{1}+{2}+{3}".format(self.width, self.height, self.pos[0], self.pos[1]))
         self.root.config(background='black')
         self.root.resizable(0, 0)
 
@@ -51,6 +56,10 @@ class TWindow(tkinter.Frame):
 
         # BUTTONS
         self.buttons = [self.get_button('Play'), self.get_button('Instructions'), self.get_button('Options')]
+        self.buttons[0].bind('<Button-1>', self.on_play_click)
+        self.buttons[1].bind('<Button-1>', self.on_instructions_click)
+        self.buttons[2].bind('<Button-1>', self.on_options_click)
+        
 
         # MUSIC
         self.mouse_over_btn_sound = pygame.mixer.Sound('src/sounds/buttons/mouse_over_button_sound.wav')
@@ -61,6 +70,29 @@ class TWindow(tkinter.Frame):
         self.root.lift()
         self.root.call('wm', 'attributes', '.', '-topmost', True)
         self.root.after_idle(self.root.call, 'wm', 'attributes', '.', '-topmost', False)       
+
+        # ON EXIT
+        self.root.wm_protocol("WM_DELETE_WINDOW", self.on_exit)
+
+    #
+
+    def on_exit(self):
+        if messagebox.askyesno("Exit", "Do you want to quit the application?"):
+            self.root.destroy()
+            TWindow.proceed = False
+    #
+    
+    def on_play_click(self, event):
+        self.root.destroy()
+        TWindow.proceed = True
+    #
+
+    def on_instructions_click(self, event):
+        print('instructions')
+    #
+    
+    def on_options_click(self, event):
+        print('options')
     #
     
     def get_panel(self, w, h, color='#000', fill="both", expand=True, pady=0):
@@ -102,20 +134,32 @@ class TWindow(tkinter.Frame):
 # end of TWindow
 
 
+
 class Panel(tkinter.Frame):
+    
     def __init__(self, root, w, h, color='#000'):
         tkinter.Frame.__init__(self, root, width=w, height=h, background=color)
+    #
+    
+# end Panel
 
-# end of TPanel
 
-def test():
-    """ Use this function to test the GUI for the Tron Kart game"""
-    root = tkinter.Tk()
-    tronwin = TWindow(root, 'Tron Kart')
-    root.mainloop()
-    pygame.quit()
-#
-#test()
+class Instructions:
+
+    def __init__(self, root):
+        self.root = root
+    #
+    
+# end Instructions
+
+
+class Options:
+    def __init__(self, root):
+        self.root = root
+    #
+    
+# end Options
+
 
 
                      
