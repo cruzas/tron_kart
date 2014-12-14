@@ -16,12 +16,18 @@ class TWindow(tkinter.Frame):
     """ TWindow is a class specifically created for the Tron Kart game."""
 
     proceed = True
-    
+    toplevels = [False, False] # 0=instructions, 1=options
+    BG_COLOR = 'black'
+    FONT = 'giorgia'
+    NORMAL_FONT = (FONT, 20)    
+    OVER_FONT = (FONT, 22, 'bold')
+
+    C_NORMAL_FONT = (FONT, 18)
+    C_OVER_FONT = (FONT, 20, 'bold')
+
+
     def __init__(self, root, title):
         super(TWindow, self).__init__()
-        
-        self.normal_font = ("arial", 20)
-        self.over_font = ("arial", 22, 'bold')
 
         # ROOT
         self.root = root
@@ -42,27 +48,25 @@ class TWindow(tkinter.Frame):
         self.pos = self.get_center_coords(self.width, self.height)
             
         self.root.geometry("{0}x{1}+{2}+{3}".format(self.width, self.height, self.pos[0], self.pos[1]))
-        self.root.config(background='black')
+        self.root.config(background=TWindow.BG_COLOR)
         self.root.resizable(0, 0)
 
         # HEAD
-        self.title_frame = self.get_panel(self.width, 50, color="black", fill=tkinter.X, expand=False)
+        self.title_frame = self.get_panel(self.width, 50, color=TWindow.BG_COLOR, fill=tkinter.X, expand=False)
         self.title_img = self.get_title_img()
         self.title_lab = tkinter.Label(self.title_frame, relief=tkinter.SUNKEN, bg="#000", image=self.title_img)
         self.title_lab.pack(fill=tkinter.BOTH)
 
         # BODY
-        self.body_frame = self.get_panel(self.width, self.height, color='black', pady=60)
+        self.body_frame = self.get_panel(self.width, self.height, color=TWindow.BG_COLOR, pady=60)
 
         # BUTTONS
-        self.buttons = [self.get_button('Play'), self.get_button('Instructions'), self.get_button('Options')]
-        self.buttons[0].bind('<Button-1>', self.on_play_click)
-        self.buttons[1].bind('<Button-1>', self.on_instructions_click)
-        self.buttons[2].bind('<Button-1>', self.on_options_click)
-        
+        self.buttons = [self.get_button('Play',  self.on_play_click),
+                        self.get_button('Instructions', self.on_instructions_click),
+                        self.get_button('Options', self.on_options_click)]
 
         # MUSIC
-        self.mouse_over_btn_sound = pygame.mixer.Sound('src/sounds/buttons/mouse_over_button_sound.wav')
+        self.btn_sound = pygame.mixer.Sound('src/sounds/buttons/mouse_over_button_sound.wav')
 
         
         # WINDOWS SETTINGS
@@ -88,11 +92,31 @@ class TWindow(tkinter.Frame):
     #
 
     def on_instructions_click(self, event):
-        print('instructions')
+        if not TWindow.toplevels[0]:
+            TWindow.toplevels[0] = True
+            top_level = tkinter.Toplevel(self.root, bg=TWindow.BG_COLOR)
+            top_level.wm_title('Instructions')
+            top_level.resizable(0, 0)
+            width = 300
+            height = int(self.root.winfo_height() / 2)
+            x = self.root.winfo_x() - width
+            y = self.root.winfo_y() 
+            top_level.geometry('{0}x{1}+{2}+{3}'.format(width, height, x, y))
+            instructions = Instructions(top_level, self.btn_sound)
     #
     
     def on_options_click(self, event):
-        print('options')
+        if not TWindow.toplevels[1]:
+            TWindow.toplevels[1] = True
+            top_level = tkinter.Toplevel(self.root, background=TWindow.BG_COLOR)
+            top_level.wm_title('Options')
+            top_level.resizable(0, 0)
+            width = 300
+            height = int(self.root.winfo_height() / 2)
+            x = self.root.winfo_x() + self.root.winfo_width()
+            y = self.root.winfo_y()
+            top_level.geometry('{0}x{1}+{2}+{3}'.format(width, height, x, y))
+            options = Options(top_level, self.btn_sound)
     #
     
     def get_panel(self, w, h, color='#000', fill="both", expand=True, pady=0):
@@ -113,22 +137,23 @@ class TWindow(tkinter.Frame):
         return img
     #
 
-    def get_button(self, text, pady=25):
-        btn = tkinter.Button(self.body_frame, text=text, width=25, bg='#2ff', font=self.normal_font)
+    def get_button(self, text, event_handler, pady=25):
+        btn = tkinter.Button(self.body_frame, text=text, width=25, bg='#2ff', font=TWindow.NORMAL_FONT)
         btn.bind('<Enter>', self.on_mouse_over_btn)
         btn.bind('<Leave>', self.on_mouse_leave_btn)
+        btn.bind('<Button-1>', event_handler)
         btn.pack(ipady=3, pady=pady)
         return btn
     #
     
     def on_mouse_over_btn(self, event):
-        event.widget.config(font=self.over_font)
-        self.mouse_over_btn_sound.play()
+        event.widget.config(font=TWindow.OVER_FONT)
+        self.btn_sound.play()
     #
         
     def on_mouse_leave_btn(self, event):
-        event.widget.config(font=self.normal_font)
-        self.mouse_over_btn_sound.stop()
+        event.widget.config(font=TWindow.NORMAL_FONT)
+        self.btn_sound.stop()
     #
     
 # end of TWindow
@@ -144,19 +169,98 @@ class Panel(tkinter.Frame):
 # end Panel
 
 
-class Instructions:
+class Options(tkinter.Frame):
 
-    def __init__(self, root):
+    def __init__(self, root, btn_sound):
         self.root = root
+        self.root.wm_protocol("WM_DELETE_WINDOW", self.on_exit)
+        self.btn_sound = btn_sound
+        self.root.update()
+        self.buttons = [self.get_button('Game Settings', self.game_settings),
+                        self.get_button('Video Settings', self.video_settings),
+                        self.get_button('Audio Settings', self.audio_settings)]
     #
+    
+    def on_exit(self):
+        TWindow.toplevels[1] = False
+        self.root.destroy()
+    #
+
+    def get_button(self, text, event_handler, pady=24):
+        btn = tkinter.Button(self.root, text=text, width=15, bg='#2ff', font=TWindow.C_NORMAL_FONT)
+        btn.bind('<Enter>', self.on_mouse_over_btn)
+        btn.bind('<Leave>', self.on_mouse_leave_btn)
+        btn.bind('<Button-1>', event_handler)
+        btn.pack(ipady=1, pady=pady)
+        return btn
+    #
+    
+    def on_mouse_over_btn(self, event):
+        event.widget.config(font=TWindow.C_OVER_FONT)
+        self.btn_sound.play()
+    #
+        
+    def on_mouse_leave_btn(self, event):
+        event.widget.config(font=TWindow.C_NORMAL_FONT)
+        self.btn_sound.stop()
+    #
+
+    def game_settings(self, event):
+        print('game settings')
+        self.root.withdraw()# hides the window
+
+    def video_settings(self, event):
+        print('video settings')
+        self.root.withdraw()# hides the window
+
+    def audio_settings(self, event):
+        print('audio settings')
+        self.root.withdraw() # hides the window
     
 # end Instructions
 
 
-class Options:
-    def __init__(self, root):
+class Instructions(tkinter.Frame):
+    def __init__(self, root, btn_sound):
         self.root = root
+        self.root.wm_protocol("WM_DELETE_WINDOW", self.on_exit)
+        self.btn_sound = btn_sound
+        self.root.update()
+        self.buttons = [self.get_button('Commands', self.commands),
+                        self.get_button('Colors', self.colors),
+                        self.get_button('Power Ups', self.power_ups)]
+        
+    def on_exit(self):
+        TWindow.toplevels[0] = False
+        self.root.destroy()
+
+    def get_button(self, text, event_handler, pady=24):
+        btn = tkinter.Button(self.root, text=text, width=15, bg='#2ff', font=TWindow.C_NORMAL_FONT)
+        btn.bind('<Enter>', self.on_mouse_over_btn)
+        btn.bind('<Leave>', self.on_mouse_leave_btn)
+        btn.bind('<Button-1>', event_handler)
+        btn.pack(ipady=1, pady=pady)
+        return btn
     #
+    
+    def on_mouse_over_btn(self, event):
+        event.widget.config(font=TWindow.C_OVER_FONT)
+        self.btn_sound.play()
+    #
+        
+    def on_mouse_leave_btn(self, event):
+        event.widget.config(font=TWindow.C_NORMAL_FONT)
+        self.btn_sound.stop()
+    #
+
+    def commands(self, event):
+        print('commands')
+
+    def colors(self, event):
+        print('colors')
+
+    def power_ups(self, event):
+        print('power_ups')
     
 # end Options
 
