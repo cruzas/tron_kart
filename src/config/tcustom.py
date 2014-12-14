@@ -3,6 +3,7 @@ Modify this file to curtomise the settings of the game.
 """
 
 import pygame
+import random
 from src.tutilities import get_file_names
 from src.tcolors import *
 
@@ -41,10 +42,16 @@ P1_CMDS = {'up': pygame.K_w,
 
 P1_KEY_NAMES = {}
 
+randint = random.randint(0, len(COLORS) - 1)
+randint2 = random.randint(0, len(COLORS) - 1)
+while randint2 == randint:
+    randint2 = random.randint(0, len(COLORS) - 1)
 
 PLAYER_1 = {'name': 'Kill Bill (S. Jobs)',
-            'image': PLAYERS_IMGS[1],
-            'color': COLORS[1],
+            # 'image': PLAYERS_IMGS[randint],
+            'image': PLAYERS_IMGS[randint],
+            'color': COLORS[randint],
+            # 'color': COLORS[1],
             'commands': P1_CMDS}
 #
 P2_CMDS = {'up': pygame.K_UP,
@@ -54,8 +61,10 @@ P2_CMDS = {'up': pygame.K_UP,
            'stop': pygame.K_RSHIFT}
 
 PLAYER_2 = {'name': 'Bill Logical Gate',
-            'image': PLAYERS_IMGS[5],
-            'color': COLORS[5],
+            # 'image': PLAYERS_IMGS[5],
+            'image': PLAYERS_IMGS[randint2],
+            # 'color': COLORS[5],
+            'color': COLORS[randint2],
             'commands': P1_CMDS}
 
 P2_KEY_NAMES = {}

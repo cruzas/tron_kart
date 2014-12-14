@@ -163,7 +163,6 @@ class TronGrid:
     def gameover(self, winner):
         """Game is over. You can start again or quit"""
         game_over = True
-
         msg = ''
         size = 40
 
