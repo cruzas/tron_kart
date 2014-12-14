@@ -15,7 +15,7 @@ class TMoto:
     STATUS = [0, 1, 2] # collision status: 0=NO, 1=YES, 2=BOTH
     MAX_LIVES = 3
 
-    def __init__(self, surface, name, lives, img_path, pos, piece_color, piece_image, size=(30, 30), piece_size=(4, 4), direction='', length=60):
+    def __init__(self, surface, name, lives, img_path, pos, piece_color, size=(30, 30), piece_size=(4, 4), direction='', length=60):
         """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
         self.timer = TTimer(100) # 100 is the amount of "time" that has to pass
         self.explosion_sound = pygame.mixer.Sound('src/sounds/explosion.aiff')
@@ -31,8 +31,7 @@ class TMoto:
         self.image = pygame.transform.scale(self.image, (self.size))
         self.appearing = True
         self.lives = lives
-    
-        self.piece_image = piece_image
+        
         self.piece_size = piece_size
         self.piece_color = piece_color
 

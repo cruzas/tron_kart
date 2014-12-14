@@ -9,6 +9,7 @@ import tkinter
 from tkinter import messagebox
 import pygame
 import os
+from src.ttable import TTable
 
 
 class TWindow(tkinter.Frame):
@@ -22,7 +23,7 @@ class TWindow(tkinter.Frame):
     NORMAL_FONT = (FONT, 20)    
     OVER_FONT = (FONT, 22, 'bold')
 
-    C_NORMAL_FONT = (FONT, 18)
+    C_NORMAL_FONT = (FONT, 16)
     C_OVER_FONT = (FONT, 20, 'bold')
 
 
@@ -170,8 +171,10 @@ class Panel(tkinter.Frame):
 
 
 class Options(tkinter.Frame):
+    option_opened = False
 
     def __init__(self, root, btn_sound):
+        super(Options, self).__init__()
         self.root = root
         self.root.wm_protocol("WM_DELETE_WINDOW", self.on_exit)
         self.btn_sound = btn_sound
@@ -222,6 +225,7 @@ class Options(tkinter.Frame):
 
 class Instructions(tkinter.Frame):
     def __init__(self, root, btn_sound):
+        super(Instructions, self).__init__()
         self.root = root
         self.root.wm_protocol("WM_DELETE_WINDOW", self.on_exit)
         self.btn_sound = btn_sound
@@ -264,6 +268,22 @@ class Instructions(tkinter.Frame):
     
 # end Options
 
+
+class Commands:
+
+    def __init__(self, root, btn_sound):
+        pass
+#
+
+class Colors:
+    def __init__(self, root, btn_sound):
+        pass
+#
+
+class PowerUps:
+    def __init__(self, root, btn_sound):
+        pass
+        
 
 
                      
