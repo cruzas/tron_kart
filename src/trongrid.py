@@ -148,7 +148,7 @@ class TronGrid:
                 winning_player = self.moto2.name
             msg = winning_player + " is winning!"
         else:
-            msg = 'Draw!'
+            msg = 'Nobody is winning!'
 
         size = 30
         pos = self.board.get_middle_coords(msg, size)
