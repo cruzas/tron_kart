@@ -42,15 +42,16 @@ P1_CMDS = {'up': pygame.K_w,
 
 P1_KEY_NAMES = {}
 
-randint = random.randint(0, len(COLORS) - 1)
-randint2 = random.randint(0, len(COLORS) - 1)
-while randint2 == randint:
-    randint2 = random.randint(0, len(COLORS) - 1)
+# Chooses random colours for both players
+randcolour1 = random.randint(0, len(COLORS) - 1)
+randcolour2 = random.randint(0, len(COLORS) - 1)
+while randcolour2 == randcolour1:
+    randcolour2 = random.randint(0, len(COLORS) - 1)
 
 PLAYER_1 = {'name': 'Kill Bill (S. Jobs)',
             # 'image': PLAYERS_IMGS[randint],
-            'image': PLAYERS_IMGS[randint],
-            'color': COLORS[randint],
+            'image': PLAYERS_IMGS[randcolour1],
+            'color': COLORS[randcolour1],
             # 'color': COLORS[1],
             'commands': P1_CMDS}
 #
@@ -62,9 +63,9 @@ P2_CMDS = {'up': pygame.K_UP,
 
 PLAYER_2 = {'name': 'Bill Logical Gate',
             # 'image': PLAYERS_IMGS[5],
-            'image': PLAYERS_IMGS[randint2],
+            'image': PLAYERS_IMGS[randcolour2],
             # 'color': COLORS[5],
-            'color': COLORS[randint2],
+            'color': COLORS[randcolour2],
             'commands': P1_CMDS}
 
 P2_KEY_NAMES = {}
