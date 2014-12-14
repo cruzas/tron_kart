@@ -93,11 +93,18 @@ class TronGrid:
         pygame.quit()
     #
     
+    def restart(self):
+        """Reset the background and the position of the 2 motos."""
+        self.board.update()
+        self.moto = TMoto(self.board.surface, self.name_1, TMoto.MAX_LIVES, self.image_1, self.pos, self.color_1)
+        self.moto2 = TMoto(self.board.surface, self.name_2, TMoto.MAX_LIVES, self.image_2, self.pos_2, self.color_2)
+    #
+
     def reset(self):
         """Reset the background and the position of the 2 motos."""
         self.board.update()
-        self.moto = TMoto(self.board.surface, self.name_1, TMoto.MAX_LIVES, self.image_1, self.pos, self.color_2)
-        self.moto2 = TMoto(self.board.surface, self.name_2, TMoto.MAX_LIVES, self.image_2, self.pos_2, self.color_2)
+        self.moto = TMoto(self.board.surface, self.name_1, self.moto.lives, self.image_1, self.pos, self.color_1)
+        self.moto2 = TMoto(self.board.surface, self.name_2, self.moto2.lives, self.image_2, self.pos_2, self.color_2)
     #
 
     def pause(self):
@@ -187,7 +194,7 @@ class TronGrid:
                         pygame.quit()
                         quit()
                     elif event.key == pygame.K_c:
-                        self.reset()
+                        self.restart()
                         
                         game_over == False
                         self.game_music.stop()
