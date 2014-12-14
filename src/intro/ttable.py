@@ -1,5 +1,5 @@
-"""
-Table class used with tkinter GUI applications.
+"""Table class used with tkinter GUI applications.
+@author: Nelson Dos Santos
 """
 
 import tkinter

@@ -10,26 +10,18 @@ from tkinter import messagebox
 import pygame
 import os
 from src.intro.ttable import TTable
+from src.intro.constants import *
 
 
 class TWindow(tkinter.Frame):
-
     """ TWindow is a class specifically created for the Tron Kart game."""
 
     proceed = True
     toplevels = [False, False] # 0=instructions, 1=options
-    BG_COLOR = 'black'
-    FONT = 'giorgia'
-    NORMAL_FONT = (FONT, 20)    
-    OVER_FONT = (FONT, 22, 'bold')
-
-    C_NORMAL_FONT = (FONT, 16)
-    C_OVER_FONT = (FONT, 20, 'bold')
-
 
     def __init__(self, root, title):
         super(TWindow, self).__init__()
-
+        
         # ROOT
         self.root = root
         # Tell pygame's SDL window which window ID to use    
@@ -49,17 +41,17 @@ class TWindow(tkinter.Frame):
         self.pos = self.get_center_coords(self.width, self.height)
             
         self.root.geometry("{0}x{1}+{2}+{3}".format(self.width, self.height, self.pos[0], self.pos[1]))
-        self.root.config(background=TWindow.BG_COLOR)
+        self.root.config(background=BG_COLOR)
         self.root.resizable(0, 0)
 
         # HEAD
-        self.title_frame = self.get_panel(self.width, 50, color=TWindow.BG_COLOR, fill=tkinter.X, expand=False)
+        self.title_frame = self.get_panel(self.width, 50, color=BG_COLOR, fill=tkinter.X, expand=False)
         self.title_img = self.get_title_img()
         self.title_lab = tkinter.Label(self.title_frame, relief=tkinter.SUNKEN, bg="#000", image=self.title_img)
         self.title_lab.pack(fill=tkinter.BOTH)
 
         # BODY
-        self.body_frame = self.get_panel(self.width, self.height, color=TWindow.BG_COLOR, pady=60)
+        self.body_frame = self.get_panel(self.width, self.height, color=BG_COLOR, pady=60)
 
         # BUTTONS
         self.buttons = [self.get_button('Play',  self.on_play_click),
@@ -95,11 +87,11 @@ class TWindow(tkinter.Frame):
     def on_instructions_click(self, event):
         if not TWindow.toplevels[0]:
             TWindow.toplevels[0] = True
-            top_level = tkinter.Toplevel(self.root, bg=TWindow.BG_COLOR)
+            top_level = tkinter.Toplevel(self.root, bg=BG_COLOR)
             top_level.wm_title('Instructions')
             top_level.resizable(0, 0)
             width = 300
-            height = int(self.root.winfo_height() / 2)
+            height = int(self.root.winfo_height() / 2) - 12
             x = self.root.winfo_x() - width
             y = self.root.winfo_y() 
             top_level.geometry('{0}x{1}+{2}+{3}'.format(width, height, x, y))
@@ -109,11 +101,11 @@ class TWindow(tkinter.Frame):
     def on_options_click(self, event):
         if not TWindow.toplevels[1]:
             TWindow.toplevels[1] = True
-            top_level = tkinter.Toplevel(self.root, background=TWindow.BG_COLOR)
+            top_level = tkinter.Toplevel(self.root, background=BG_COLOR)
             top_level.wm_title('Options')
             top_level.resizable(0, 0)
             width = 300
-            height = int(self.root.winfo_height() / 2)
+            height = int(self.root.winfo_height() / 2) - 12
             x = self.root.winfo_x() + self.root.winfo_width()
             y = self.root.winfo_y()
             top_level.geometry('{0}x{1}+{2}+{3}'.format(width, height, x, y))
@@ -139,7 +131,7 @@ class TWindow(tkinter.Frame):
     #
 
     def get_button(self, text, event_handler, pady=25):
-        btn = tkinter.Button(self.body_frame, text=text, width=25, bg='#2ff', font=TWindow.NORMAL_FONT)
+        btn = tkinter.Button(self.body_frame, text=text, width=25, bg='#2ff', font=NORMAL_FONT)
         btn.bind('<Enter>', self.on_mouse_over_btn)
         btn.bind('<Leave>', self.on_mouse_leave_btn)
         btn.bind('<Button-1>', event_handler)
@@ -148,18 +140,18 @@ class TWindow(tkinter.Frame):
     #
     
     def on_mouse_over_btn(self, event):
-        event.widget.config(font=TWindow.OVER_FONT)
+        event.widget.config(font=OVER_FONT)
         self.btn_sound.play()
     #
         
     def on_mouse_leave_btn(self, event):
-        event.widget.config(font=TWindow.NORMAL_FONT)
+        event.widget.config(font=NORMAL_FONT)
         self.btn_sound.stop()
     #
     
 # end of TWindow
 
-
+#############################################################################
 
 class Panel(tkinter.Frame):
     
@@ -169,10 +161,134 @@ class Panel(tkinter.Frame):
     
 # end Panel
 
+#############################################################################
 
+class Instructions(tkinter.Frame):
+    i_opened = False
+    
+    def __init__(self, root, btn_sound):
+        super(Instructions, self).__init__()
+        self.root = root
+        self.root.wm_protocol("WM_DELETE_WINDOW", self.on_exit)
+        self.btn_sound = btn_sound
+        self.root.update()
+        self.buttons = [self.get_button('Commands', self.commands),
+                        self.get_button('Colors', self.colors),
+                        self.get_button('Power Ups', self.power_ups)]
+        
+    def on_exit(self):
+        TWindow.toplevels[0] = False
+        self.root.destroy()
+
+    def get_button(self, text, event_handler, pady=20):
+        btn = tkinter.Button(self.root, text=text, width=15, bg='#2ff', font=C_NORMAL_FONT)
+        btn.bind('<Enter>', self.on_mouse_over_btn)
+        btn.bind('<Leave>', self.on_mouse_leave_btn)
+        btn.bind('<Button-1>', event_handler)
+        btn.pack(ipady=1, pady=pady)
+        return btn
+    #
+    
+    def on_mouse_over_btn(self, event):
+        event.widget.config(font=C_OVER_FONT)
+        self.btn_sound.play()
+    #
+        
+    def on_mouse_leave_btn(self, event):
+        event.widget.config(font=C_NORMAL_FONT)
+        self.btn_sound.stop()
+    #
+
+    def commands(self, event):
+        if not Instructions.i_opened:
+            Instructions.i_opened = True
+            root = tkinter.Toplevel(self.root, bg=BG_COLOR)
+            root.wm_title('Commands')
+            root.resizable(0, 0)
+            width = self.root.winfo_width()
+            height = self.root.winfo_height() + 1
+            x = self.root.winfo_x()
+            y = self.root.winfo_y() + height + 22
+            root.geometry('{0}x{1}+{2}+{3}'.format(width, height, x, y))
+            cmds = Commands(root, self.btn_sound)
+    #
+    
+    def colors(self, event):
+        if not Instructions.i_opened:
+            Instructions.i_opened = True
+            root = tkinter.Toplevel(self.root, bg=BG_COLOR)
+            root.wm_title('Colors')
+            root.resizable(0, 0)
+            width = self.root.winfo_width()
+            height = self.root.winfo_height() + 1
+            x = self.root.winfo_x()
+            y = self.root.winfo_y() + height + 22
+            root.geometry('{0}x{1}+{2}+{3}'.format(width, height, x, y))
+            colors = Colors(root, self.btn_sound)
+    #
+    
+    def power_ups(self, event):
+        if not Instructions.i_opened:
+            Instructions.i_opened = True
+            root = tkinter.Toplevel(self.root, bg=BG_COLOR)
+            root.wm_title('Power Ups')
+            root.resizable(0, 0)
+            width = self.root.winfo_width()
+            height = self.root.winfo_height() + 1
+            x = self.root.winfo_x()
+            y = self.root.winfo_y() + height + 22
+            root.geometry('{0}x{1}+{2}+{3}'.format(width, height, x, y))
+            power_ups = PowerUps(root, self.btn_sound)
+    #
+    
+# end Options
+#############################################################################
+
+class Commands:
+
+    def __init__(self, root, btn_sound):
+        self.root = root
+        self.btn_sound = btn_sound
+        self.root.wm_protocol("WM_DELETE_WINDOW", self.on_exit)
+    #
+    
+    def on_exit(self):
+        Instructions.i_opened = False
+        self.root.destroy()
+    #
+#
+
+class Colors:
+    def __init__(self, root, btn_sound):
+        self.root = root
+        self.btn_sound = btn_sound
+        self.root.wm_protocol("WM_DELETE_WINDOW", self.on_exit)
+    #
+    
+    def on_exit(self):
+        Instructions.i_opened = False
+        self.root.destroy()
+    #
+#
+
+class PowerUps:
+    def __init__(self, root, btn_sound):
+        self.root = root
+        self.btn_sound = btn_sound
+        self.root.wm_protocol("WM_DELETE_WINDOW", self.on_exit)
+    #
+    
+    def on_exit(self):
+        Instructions.i_opened = False
+        self.root.destroy()
+    #
+#
+    
+#############################################################################
+    
 class Options(tkinter.Frame):
-    option_opened = False
-
+    o_opened = False
+    
     def __init__(self, root, btn_sound):
         super(Options, self).__init__()
         self.root = root
@@ -189,8 +305,8 @@ class Options(tkinter.Frame):
         self.root.destroy()
     #
 
-    def get_button(self, text, event_handler, pady=24):
-        btn = tkinter.Button(self.root, text=text, width=15, bg='#2ff', font=TWindow.C_NORMAL_FONT)
+    def get_button(self, text, event_handler, pady=20):
+        btn = tkinter.Button(self.root, text=text, width=15, bg='#2ff', font=C_NORMAL_FONT)
         btn.bind('<Enter>', self.on_mouse_over_btn)
         btn.bind('<Leave>', self.on_mouse_leave_btn)
         btn.bind('<Button-1>', event_handler)
@@ -199,91 +315,101 @@ class Options(tkinter.Frame):
     #
     
     def on_mouse_over_btn(self, event):
-        event.widget.config(font=TWindow.C_OVER_FONT)
+        event.widget.config(font=C_OVER_FONT)
         self.btn_sound.play()
     #
         
     def on_mouse_leave_btn(self, event):
-        event.widget.config(font=TWindow.C_NORMAL_FONT)
+        event.widget.config(font=C_NORMAL_FONT)
         self.btn_sound.stop()
     #
 
     def game_settings(self, event):
-        print('game settings')
-        self.root.withdraw()# hides the window
-
+        if not Options.o_opened:
+            Options.o_opened = True
+            root = tkinter.Toplevel(self.root, bg=BG_COLOR)
+            root.wm_title('Game Settings')
+            root.resizable(0, 0)
+            width = self.root.winfo_width()
+            height = self.root.winfo_height() + 1
+            x = self.root.winfo_x()
+            y = self.root.winfo_y() + height + 22
+            root.geometry('{0}x{1}+{2}+{3}'.format(width, height, x, y))
+            cmds = GameSettings(root, self.btn_sound)
+    #
+    
     def video_settings(self, event):
-        print('video settings')
-        self.root.withdraw()# hides the window
-
+        if not Options.o_opened:
+            Options.o_opened = True
+            root = tkinter.Toplevel(self.root, bg=BG_COLOR)
+            root.wm_title('Video Settings')
+            root.resizable(0, 0)
+            width = self.root.winfo_width()
+            height = self.root.winfo_height() + 1
+            x = self.root.winfo_x()
+            y = self.root.winfo_y() + height + 22
+            root.geometry('{0}x{1}+{2}+{3}'.format(width, height, x, y))
+            colors = VideoSettings(root, self.btn_sound)
+    #
+    
     def audio_settings(self, event):
-        print('audio settings')
-        self.root.withdraw() # hides the window
+        if not Options.o_opened:
+            Options.o_opened = True
+            root = tkinter.Toplevel(self.root, bg=BG_COLOR)
+            root.wm_title('Audio Settings')
+            root.resizable(0, 0)
+            width = self.root.winfo_width()
+            height = self.root.winfo_height() + 1
+            x = self.root.winfo_x()
+            y = self.root.winfo_y() + height + 22
+            root.geometry('{0}x{1}+{2}+{3}'.format(width, height, x, y))
+            power_ups = AudioSettings(root, self.btn_sound)
+    #
     
 # end Instructions
+#############################################################################
 
+class GameSettings:
 
-class Instructions(tkinter.Frame):
     def __init__(self, root, btn_sound):
-        super(Instructions, self).__init__()
         self.root = root
-        self.root.wm_protocol("WM_DELETE_WINDOW", self.on_exit)
         self.btn_sound = btn_sound
-        self.root.update()
-        self.buttons = [self.get_button('Commands', self.commands),
-                        self.get_button('Colors', self.colors),
-                        self.get_button('Power Ups', self.power_ups)]
-        
+        self.root.wm_protocol("WM_DELETE_WINDOW", self.on_exit)
+    #
+    
     def on_exit(self):
-        TWindow.toplevels[0] = False
+        Options.o_opened = False
         self.root.destroy()
-
-    def get_button(self, text, event_handler, pady=24):
-        btn = tkinter.Button(self.root, text=text, width=15, bg='#2ff', font=TWindow.C_NORMAL_FONT)
-        btn.bind('<Enter>', self.on_mouse_over_btn)
-        btn.bind('<Leave>', self.on_mouse_leave_btn)
-        btn.bind('<Button-1>', event_handler)
-        btn.pack(ipady=1, pady=pady)
-        return btn
     #
-    
-    def on_mouse_over_btn(self, event):
-        event.widget.config(font=TWindow.C_OVER_FONT)
-        self.btn_sound.play()
-    #
-        
-    def on_mouse_leave_btn(self, event):
-        event.widget.config(font=TWindow.C_NORMAL_FONT)
-        self.btn_sound.stop()
-    #
-
-    def commands(self, event):
-        print('commands')
-
-    def colors(self, event):
-        print('colors')
-
-    def power_ups(self, event):
-        print('power_ups')
-    
-# end Options
-
-
-class Commands:
-
-    def __init__(self, root, btn_sound):
-        pass
 #
 
-class Colors:
+class VideoSettings:
     def __init__(self, root, btn_sound):
-        pass
+        self.root = root
+        self.btn_sound = btn_sound
+        self.root.wm_protocol("WM_DELETE_WINDOW", self.on_exit)
+    #
+    
+    def on_exit(self):
+        Options.o_opened = False
+        self.root.destroy()
+    #
 #
 
-class PowerUps:
+class AudioSettings:
     def __init__(self, root, btn_sound):
-        pass
-        
+        self.root = root
+        self.btn_sound = btn_sound
+        self.root.wm_protocol("WM_DELETE_WINDOW", self.on_exit)
+    #
+    
+    def on_exit(self):
+        Options.o_opened = False
+        self.root.destroy()
+    #        
+#############################################################################
+
+
 
 
                      
