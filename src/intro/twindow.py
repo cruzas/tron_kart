@@ -9,7 +9,7 @@ import tkinter
 from tkinter import messagebox
 import pygame
 import os
-from src.ttable import TTable
+from src.intro.ttable import TTable
 
 
 class TWindow(tkinter.Frame):

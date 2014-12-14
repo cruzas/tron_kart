@@ -1,7 +1,5 @@
 """
 USE THIS FILE TO WRITE 'UTILITY' FUNCTIONS!
-
-
 """
 
 import os

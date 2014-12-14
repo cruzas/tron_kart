@@ -12,9 +12,9 @@ from src.tutilities import get_file_names
 from src.tcolors import *
 from src.tmoto import * # imports TMoto, TTimer, TFood and pygame
 from src.tboard import TBoard
-from src.twindow import TWindow, tkinter
-from src.tcustom import * # import settings
-import src.tdefault
+from src.intro.twindow import TWindow, tkinter
+from src.config.tcustom import * # import settings
+import src.config.tdefault
 
 
 class TronGrid:
