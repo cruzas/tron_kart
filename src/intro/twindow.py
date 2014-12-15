@@ -250,6 +250,7 @@ class Commands(tkinter.Frame):
     def __init__(self, root, btn_sound):
         self.root = root
         self.root.update()
+        self.root.resizable(0, 0)
         self.btn_sound = btn_sound
         self.root.wm_protocol("WM_DELETE_WINDOW", self.on_exit)
 
