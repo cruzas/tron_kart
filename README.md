@@ -13,7 +13,7 @@ Just execute the **run.py** script using Python 3.4.
 
 Looking for more information?
 -
-Please take a look at our **wiki** to find information on the **user guide** and the work that has been done developing this game.
+Please take a look at our [**wiki**](https://github.com/cruzas/tron_grid/wiki) to find information on the [**user guide**](https://github.com/cruzas/tron_grid/wiki#user-guide) and the work that has been done developing this game.
 
 
 
