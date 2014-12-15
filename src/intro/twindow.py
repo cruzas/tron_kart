@@ -11,6 +11,7 @@ import pygame
 import os
 from src.intro.ttable import TTable
 from src.intro.constants import *
+from src.config.tcustom import *
 
 
 class TWindow(tkinter.Frame):
@@ -204,7 +205,7 @@ class Instructions(tkinter.Frame):
             Instructions.i_opened = True
             root = tkinter.Toplevel(self.root, bg=BG_COLOR)
             root.wm_title('Commands')
-            root.resizable(0, 0)
+#            root.resizable(0, 0)
             width = self.root.winfo_width()
             height = self.root.winfo_height() + 1
             x = self.root.winfo_x()
@@ -244,14 +245,41 @@ class Instructions(tkinter.Frame):
 # end Options
 #############################################################################
 
-class Commands:
+class Commands(tkinter.Frame):
 
     def __init__(self, root, btn_sound):
         self.root = root
+        self.root.update()
         self.btn_sound = btn_sound
         self.root.wm_protocol("WM_DELETE_WINDOW", self.on_exit)
-    #
-    
+
+        self.names = [PLAYER_1['name'][0:10], PLAYER_2['name'][0:10]]
+        
+        self.headers_1 = ['', self.names[0]]
+        self.data_1 = [['COMMAND', 'NAME']]
+
+        for k, v in P1_CMDS.items():               
+            self.data_1.append([k.capitalize(), v])
+
+        self.table = TTable(self.root,6, 2, self.root.winfo_width()/2, 200,
+                            '', padx=9, pady=8, h_row=0, h_col=0,
+                           headers=self.headers_1, data=self.data_1)
+        
+        self.table.grid(row=0, column=0, columnspan=1)
+
+        self.headers_2 = ['', self.names[1]]
+        self.data_2 = [['COMMAND', 'NAME']]
+        
+        for k, v in P2_CMDS.items():               
+            self.data_2.append([k.capitalize(), v])
+
+        self.table = TTable(self.root, 6, 2, self.root.winfo_width()/2, 200,
+                            'pink', padx=9, pady=8, h_row=1, h_col=1,
+                            headers=self.headers_2, data=self.data_2)
+        
+        self.table.grid(row=0, column=1, columnspan=1)
+                
+        
     def on_exit(self):
         Instructions.i_opened = False
         self.root.destroy()
