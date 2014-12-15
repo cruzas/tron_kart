@@ -305,12 +305,13 @@ class TronGrid:
             self.board.update()
 
             # check collisions and if there's a winner
-            if self.moto.crashing(self.moto2) != TMoto.STATUS[0]:
-                self.show_status()
-            elif self.moto2.crashing(self.moto) != TMoto.STATUS[0]:
-                self.show_status()
-            else:
+            if self.moto.crashing(self.moto2) != TMoto.STATUS[0]: # Collision
                 self.check_winner()
+                self.show_status()
+            elif self.moto2.crashing(self.moto) != TMoto.STATUS[0]: # Collision
+                self.check_winner()
+                self.show_status()
+               
                         
             self.moto.move()
             self.moto2.move()
