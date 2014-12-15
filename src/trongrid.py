@@ -200,13 +200,13 @@ class TronGrid:
                         self.run()
     #
     
-    def set_score(self, score, player, pos="RIGHT"):
+    def set_score(self, score, player, pos="RIGHT", color=WHITE):
         """Changes the set_score of the players"""
         msg = player + ": " + str(score)
         font_size = 30
         if pos == TronGrid.SCORE_SIDES[0] or pos == TronGrid.SCORE_SIDES[1]:
             pos = self.board.get_score_coords(msg, font_size, pos)            
-            self.board.write(msg, WHITE, font_size, pos)
+            self.board.write(msg, color, font_size, pos)
     #
 
     def check_winner(self):
@@ -320,8 +320,8 @@ class TronGrid:
             self.kiwi.appear()
             
             # setting the set_score of the 2 players
-            self.set_score(self.moto.lives, self.moto.name, TronGrid.SCORE_SIDES[0])
-            self.set_score(self.moto2.lives, self.moto2.name)
+            self.set_score(self.moto.lives, self.moto.name, TronGrid.SCORE_SIDES[0], self.moto.piece_color)
+            self.set_score(self.moto2.lives, self.moto2.name, TronGrid.SCORE_SIDES[1], self.moto2.piece_color)
 
             # checking if self.moto is hitting some power
             self.moto.get_power_from(self.apple)
