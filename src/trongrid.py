@@ -167,7 +167,7 @@ class TronGrid:
         size = 40
 
         if winner is None:
-            msg = "That's tie!"
+            msg = "That's a tie!"
         else:
             msg = "Congratulations " + winner.name + ", you won!"
 
@@ -211,19 +211,22 @@ class TronGrid:
 
     def check_winner(self):
         """If there's a winner it will be passed to the self.gameover method."""
-        if self.moto.lives <= 0 and self.moto2.lives <= 0:
+        if self.moto.lives == 0 and self.moto2.lives == 0:
             self.gameover(None)
-        if self.moto.lives <= 0:
-            self.gameover(self.moto2) 
-        if self.moto2.lives <= 0:
-            self.gameover(self.moto)
+        if self.moto.lives <= 0 and self.moto2.lives != 0:
+            self.gameover(self.moto) 
+        if self.moto2.lives <= 0 and self.moto.lives != 0:
+            self.gameover(self.moto2)
     #
 
     def winner(self):
         """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
-        if self.moto.lives == 0 or self.moto2.lives == 0:
+        if self.moto.lives == 0 and self.moto2.lives != 0:
             return True
-        return False
+        elif self.moto.lives != 0 and self.moto2.lives == 0:
+            return True
+        else:
+            return False
     #
     
     def run(self):
