@@ -213,9 +213,9 @@ class TronGrid:
         """If there's a winner it will be passed to the self.gameover method."""
         if self.moto.lives == 0 and self.moto2.lives == 0:
             self.gameover(None)
-        if self.moto.lives <= 0 and self.moto2.lives != 0:
+        if self.moto.lives > 0 and self.moto2.lives <= 0:
             self.gameover(self.moto) 
-        if self.moto2.lives <= 0 and self.moto.lives != 0:
+        if self.moto2.lives > 0 and self.moto.lives <= 0:
             self.gameover(self.moto2)
     #
 
@@ -305,9 +305,9 @@ class TronGrid:
             self.board.update()
 
             # check collisions and if there's a winner
-            if self.moto.crashing(self.moto2) != TMoto.STATUS[0] and not self.winner():
+            if self.moto.crashing(self.moto2) != TMoto.STATUS[0]:
                 self.show_status()
-            elif self.moto2.crashing(self.moto) != TMoto.STATUS[0] and not self.winner():
+            elif self.moto2.crashing(self.moto) != TMoto.STATUS[0]:
                 self.show_status()
             else:
                 self.check_winner()
