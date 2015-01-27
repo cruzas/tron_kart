@@ -12,12 +12,10 @@ from src.ttimer import TTimer
 
 class TMoto:
     """Main class containing the TMoto for this game."""
-
-    # static variable
-    
+    # static variables
     STATUS = [0, 1, 2] # collision status: 0=NO, 1=YES, 2=BOTH
     MAX_LIVES = 3
-
+    
     def __init__(self, surface, name, lives, img_path, pos, piece_color, size=(30, 30), piece_size=(4, 4), direction='', length=60):
         self.timer = TTimer(100) # 100 is the amount of "time" that has to pass
         self.explosion_sound = pygame.mixer.Sound('src/sounds/explosion.aiff')
@@ -259,8 +257,3 @@ class TMoto:
         # displays the trail
         for x in self.trail[:-1]: # getting elements from start to end - 1
             self.surface.fill(self.piece_color, x)
-    
-
-
-
-
