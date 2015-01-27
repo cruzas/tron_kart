@@ -5,8 +5,8 @@ this file can be modified
 
 import pygame
 import random
-from src.tutilities import get_file_names
-from src.tcolors import *
+from src.utils.tutilities import get_file_names
+from src.utils.tcolors import *
 
 
 # constants
@@ -57,11 +57,8 @@ PLAYER_2 = {'name': 'Bill Logical Gate',
             'color': COLORS[randcolour2],
             'commands': P1_CMDS}
 
-# keys' names
-KEYS = {pygame.K_w: "W", pygame.K_s: "S", pygame.K_a: "A",
-        pygame.K_d: "D", pygame.K_e: "E", pygame.K_UP: "Up arrow",
-        pygame.K_DOWN: "Down arrow", pygame.K_LEFT: "Left arrow",
-        pygame.K_RIGHT: "Right arrow", pygame.K_RSHIFT: "Right shift"}
+import src.utils.pygamekeys as pygamekeys
+KEYS = pygamekeys.KEYS
 
 # audio and music
 VOLUME = 0
@@ -79,4 +76,3 @@ if len(WAV) > 0:
     for m in WAV:
         if type(m) == str:
             BACK_MUSIC.append(B_M_PATH + m)
-

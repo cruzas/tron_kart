@@ -8,8 +8,8 @@ Description: main class of the Tron Kart game
 import random
 import sys
 
-from src.tutilities import get_file_names
-from src.tcolors import *
+from src.utils.tutilities import get_file_names
+from src.utils.tcolors import *
 from src.tmoto import * # imports TMoto, TTimer, TPowerUp and pygame
 from src.tboard import TBoard
 from src.intro.twindow import TWindow, tkinter

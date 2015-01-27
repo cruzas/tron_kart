@@ -7,12 +7,11 @@ Description: TMoto represents the motorcycle of the Tron Kart game
 
 import pygame
 from src.tpowerup import TPowerUp
-from src.ttimer import TTimer
+from src.utils.ttimer import TTimer
 
 
 class TMoto:
-    """Main class containing the TMoto for this game."""
-    # static variables
+    """represents the motorcycles of the Tron Kart game"""
     STATUS = [0, 1, 2] # collision status: 0=NO, 1=YES, 2=BOTH
     MAX_LIVES = 3
     

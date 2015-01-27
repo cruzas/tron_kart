@@ -9,7 +9,7 @@ import pygame
 
 
 class TBoard:
-    """This class represents the board of a TronGrid object."""
+    """represents the board of a Tron Kart game"""
     def __init__(self, resolution, color, image_path, title='TBoard'):
         self.title = title
         self.resolution = resolution

@@ -14,7 +14,7 @@ import tkinter
 from tkinter import messagebox
 import pygame
 import os
-from src.intro.ttable import TTable
+from src.utils.ttable import TTable
 from src.intro.constants import *
 from src.config.tcustom import *
 

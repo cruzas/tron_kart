@@ -10,9 +10,8 @@ import random
 
 
 class TPowerUp:
-    """Simple class to represent object of type TPowerUp"""
-    # static variable that keeps track of the type of powers-up that a TPowerUp can give
-    powers = ["SPEED", "SIZE"]
+    """class can represent power ups of the Tron Kart game"""
+    powers = ["SPEED", "SIZE"] # type of power ups
     
     def __init__(self, surface, img_path, power, size=(30, 30), name=''):
         if power not in TPowerUp.powers:
@@ -40,4 +39,3 @@ class TPowerUp:
     
     def appear(self):
         self.surface.blit(self.image, (self.x, self.y))
-
