@@ -1,7 +1,10 @@
 """
-This file contains the tron timer class.
+Authors: Tron Team
+Creation: December, 2014
+Last update: 27.01.2015
+Description: TTimer is an utility class for timing certain events
+in the Tron Kart game
 """
-
 
 class TTimer:
     """This class should only be used for this project.
@@ -13,16 +16,12 @@ class TTimer:
         self.t = 0
         self.started = False
         self.finished = False
-    #
     
     def start(self):
-        """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
         self.stop()
         self.started = True        
-    #
     
     def inc(self):
-        """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
         if self.started:
             if self.t >= self.max:
                 self.finished = True
@@ -30,15 +29,9 @@ class TTimer:
                 self.t += 1
 
     def ringing(self):
-        """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
         return self.finished
-    #
     
     def stop(self):
-        """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
         self.started = False
         self.finished = False
         self.t = 0
-    #
-    
-# end TronTimer

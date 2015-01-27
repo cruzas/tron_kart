@@ -55,19 +55,16 @@ class Game:
         
         pygame.display.update()
         self.run()
-    #
     
     def show_players(self):
         for p in self.players:
             p.appear()
-    #
     
     def are_players_crashing(self):
         for p in self.players:
             if p.crashing():
                 return True
         return False
-    #
     
     def run(self):
         self.running = True
@@ -122,6 +119,9 @@ class Game:
             
             pygame.display.update()
                        
-#
 
         
+
+
+
+

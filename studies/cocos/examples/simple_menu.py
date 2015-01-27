@@ -29,24 +29,18 @@ class TronMenu(cocos.menu.Menu):
 
         self.m_items.append(cocos.menu.MultipleMenuItem('Volume', self.volume, self.volumes, 8))
         self.create_menu(self.m_items, cocos.menu.zoom_in(), cocos.menu.zoom_out())        
-    #
 
     def volume(self):
         print("Volume!")
-    #
     
     def on_new_game(self):
         print("New game!")
-    #
 
     def on_quit(self):
         cocos.sys.exit(0)
-    #
 
     def score(self):
         print("Score")
-    #
-# END
 
 # Setting up the window
 
@@ -57,3 +51,7 @@ menu = TronMenu()
 scene = cocos.scene.Scene(menu)
 
 cocos.director.director.run(scene)
+
+
+
+

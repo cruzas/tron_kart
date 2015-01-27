@@ -13,11 +13,6 @@ white = (255, 255, 255)
 black = (0, 0, 0)
 red = (255, 0, 0)
 green = (0, 155, 0)
-blue = (111, 195, 223)
-# New colours added
-tron_blue = (106, 243, 243)
-tron_blue2 = (198, 241, 240)
-
 
 display_width = 800
 display_height = 600
@@ -29,7 +24,6 @@ icon_img = pygame.image.load('apple.png')
 pygame.display.set_icon(icon_img)
 
 head_img = pygame.image.load('tron.png')
-head_img = pygame.transform.scale(head_img, (30, 30))
 head_width = 73
 head_height = 73
 head = pygame.transform.scale(head_img, (head_width, head_height))
@@ -38,21 +32,21 @@ apple_img = pygame.image.load('apple.png')
 clock = pygame.time.Clock()
 
 apple_thickness = 30
-block_size = 10
+block_size = 20
 fps = 15
 
 direction = 'right'
 
-small_font = pygame.font.SysFont('helvetica', 25)
-med_font = pygame.font.SysFont('helvetica', 50)
-large_font = pygame.font.SysFont('helvetica', 80)
+small_font = pygame.font.SysFont('comicsansms', 25)
+med_font = pygame.font.SysFont('comicsansms', 50)
+large_font = pygame.font.SysFont('comicsansms', 80)
 
 def pause():
 
      paused = True
 
-     message_to_screen("Paused", tron_blue, -100, 'large')
-     message_to_screen("Press C to continue or Q to quit", tron_blue2, 25)
+     message_to_screen("Paused", black, -100, 'large')
+     message_to_screen("Press C to continue or Q to quit", black, 25)
 
      pygame.display.update()
 
@@ -101,15 +95,12 @@ def game_intro():
                     pygame.quit()
                     quit()
         
-        game_display.fill(black)
-        # Welcome message changed
-        message_to_screen("Welcome to Tron Grid", tron_blue, -100, 'large')
-        message_to_screen("The objective of the game is to defeat your"
-                          + " opponent", tron_blue2, -30)
-        message_to_screen("Power-ups will help you become more powerful", tron_blue2, 10)
-        message_to_screen("If you run into yourself or the other player's trail"
-                          +" you die!", tron_blue2, 50)
-        message_to_screen("Press C to play, P to pause or Q to quit", tron_blue2, 180)
+        game_display.fill(white)
+        message_to_screen("Welcome to Slither", green, -100, 'large')
+        message_to_screen("The objective of the game is to eat red apples", black, -30)
+        message_to_screen("The more apples you eat, the longer you get", black, 10)
+        message_to_screen("If run into yourself, or the edges, you die!", black, 50)
+        message_to_screen("Press C to play, P to pause or Q to quit", black, 180)
 
         pygame.display.update()
         clock.tick(5)
@@ -125,10 +116,10 @@ def snake(block_size, snake_list):
     elif direction == 'down':
         head = pygame.transform.rotate(head_img, 180)
     
-    game_display.blit(head, (snake_list[-1][0]-10, snake_list[-1][1]))
+    game_display.blit(head, (snake_list[-1][0], snake_list[-1][1]))
     
     for x_y in snake_list[:-1]:
-        game_display.fill(tron_blue, rect=[x_y[0], x_y[1]+10, block_size, block_size])
+        game_display.fill(green, rect=[x_y[0], x_y[1], block_size, block_size])
 
 
 def text_objects(text, color, size):
@@ -164,7 +155,7 @@ def game_loop():
     lead_y_change = 0
 
     snake_list = []
-    snake_length = 100
+    snake_length = 1
 
     rand_apple_x, rand_apple_y = rand_apple_gen()
     
@@ -175,6 +166,7 @@ def game_loop():
             message_to_screen("press C to play again or Q to quit", black, 50, 'medium')
             pygame.display.update()
               
+
         while game_over == True:
             #game_display.fill(white)
             for event in pygame.event.get():
@@ -193,42 +185,34 @@ def game_loop():
             if event.type == pygame.QUIT:
                 game_exit = True
             if event.type == pygame.KEYDOWN:
-                prev_dir = direction
-                if event.key == pygame.K_LEFT and prev_dir != 'right':
+                if event.key == pygame.K_LEFT:
                     direction = 'left'
                     lead_x_change = -block_size
                     lead_y_change = 0
-                elif event.key == pygame.K_RIGHT and prev_dir != 'left':
+                elif event.key == pygame.K_RIGHT:
                     direction = 'right'
                     lead_x_change = block_size
                     lead_y_change = 0
-                elif event.key == pygame.K_UP and prev_dir != 'down':
+                elif event.key == pygame.K_UP:
                     direction = 'up'
                     lead_y_change = -block_size
                     lead_x_change = 0
-                elif event.key == pygame.K_DOWN and prev_dir != 'up':
+                elif event.key == pygame.K_DOWN:
                     direction = 'down'
-                    lead_y_change =block_size
+                    lead_y_change = block_size
                     lead_x_change = 0
                     
                 elif event.key == pygame.K_p:
                     pause()
-        # Code added to accomplish task of not running into walls but
-        # appearing on other side instead.
-        if lead_x >= display_width:
-             lead_x = 0
-        if lead_x < 0:
-             lead_x = display_width
-        if lead_y >= display_height:
-             lead_y = 0
-        if lead_y < 0:
-             lead_y = display_height
-             # game_over = True
+
+
+        if lead_x >= display_width or lead_x < 0 or lead_y >= display_height or lead_y < 0:
+            game_over = True
 
         lead_x += lead_x_change
         lead_y += lead_y_change
         
-        game_display.fill(black)
+        game_display.fill(white)
         game_display.blit(apple_img, (rand_apple_x, rand_apple_y))
         snake_head = []
         snake_head.append(lead_x)
@@ -258,8 +242,11 @@ def game_loop():
             elif lead_y + block_size > rand_apple_y and lead_y + block_size < rand_apple_y + apple_thickness:
                 rand_apple_x, rand_apple_y = rand_apple_gen()
                 snake_length += 1
+                
+                
 
         clock.tick(fps)
+
 
     pygame.quit()
     quit()

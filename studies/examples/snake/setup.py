@@ -17,3 +17,7 @@ setup(
     options={'py2app': OPTIONS},
     setup_requires=['py2app'],
 )
+
+
+
+

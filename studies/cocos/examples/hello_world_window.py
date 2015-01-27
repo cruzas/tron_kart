@@ -17,7 +17,6 @@ class Window(cocos.layer.Layer):
         
     def print_(self):
         print("I am a window")
-# END
 
 cocos.director.director.init()
 
@@ -26,3 +25,7 @@ win3.print_()
 
 main_scene = cocos.scene.Scene(win3)
 cocos.director.director.run(main_scene)
+
+
+
+

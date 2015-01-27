@@ -122,3 +122,7 @@ main_scene = cocos.scene.Scene(action_object) # Passing our object to the __init
 # FOREST, RUN, BUT DON'T FORGET THE SCENE OTHERWISE YOU CAN FALL DOWN :D)
 cocos.director.director.run(main_scene)
 
+
+
+
+

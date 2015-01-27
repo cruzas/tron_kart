@@ -92,3 +92,7 @@ main_scene = cocos.scene.Scene(win)
 
 # Here we are just saying to the 'director' to run the 'main_scene'!
 cocos.director.director.run(main_scene)
+
+
+
+

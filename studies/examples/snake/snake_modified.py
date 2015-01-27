@@ -18,7 +18,6 @@ blue = (111, 195, 223)
 tron_blue = (106, 243, 243)
 tron_blue2 = (198, 241, 240)
 
-# 
 
 display_width = 800
 display_height = 600
@@ -270,3 +269,7 @@ def game_loop():
 
 game_intro()
 game_loop()
+
+
+
+

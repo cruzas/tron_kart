@@ -1,9 +1,12 @@
 """
-This file contains the tron motorcycle class.
+Authors: Tron Team
+Creation: December, 2014
+Last update: 27.01.2015
+Description: TMoto represents the motorcycle of the Tron Kart game
 """
 
 import pygame
-from src.tfood import TFood
+from src.tpowerup import TPowerUp
 from src.ttimer import TTimer
 
 
@@ -16,7 +19,6 @@ class TMoto:
     MAX_LIVES = 3
 
     def __init__(self, surface, name, lives, img_path, pos, piece_color, size=(30, 30), piece_size=(4, 4), direction='', length=60):
-        """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
         self.timer = TTimer(100) # 100 is the amount of "time" that has to pass
         self.explosion_sound = pygame.mixer.Sound('src/sounds/explosion.aiff')
 
@@ -65,50 +67,39 @@ class TMoto:
             self.explosion.append(image)
         
         pygame.display.update()
-    #
 
     def explode(self):
-        """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
         for status in self.explosion:
             self.surface.blit(status, (self.x, self.y))
             pygame.display.update()
             pygame.time.wait(5)
-    #
 
     def set_direction(self, direction):
-        """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
         self.direction = direction
-    #
 
     def set_position(self, step):
-        """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
         self.x_step = step[0]
         self.y_step = step[1]
-    #
 
     def collides(self, rect):
-        """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
         if self.rect.colliderect(rect):
             return True
         else:
             return False
-    #
     
     def colliding(self, moto):
-        """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
         for x in moto.trail[0:-1]:
             if self.collides(x):
                 return TMoto.STATUS[1]
         if self.collides(moto.rect):
             return TMoto.STATUS[2]
         return TMoto.STATUS[0]
-    #
 
     def crashing(self, moto):
         """This method returns 3 possible values:
-        0 = 'self' does NOT collide with 'moto';
-        1 = 'self' collides with 'moto';
-        2 = 'self' and 'moto' collide both;
+            0 = 'self' does NOT collide with 'moto'
+            1 = 'self' collides with 'moto'
+            2 = 'self' and 'moto' collide both
         The method calls colliding (which calls 'collides') to verify it there's a collision
         The method is also responsible for calling 'explode' and reduce 'lives', if a collision occurs.
         """
@@ -133,12 +124,9 @@ class TMoto:
         # NO
         else: 
             return TMoto.STATUS[0]
-    #           
 
     def update_rect(self):
-        """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
         self.rect = pygame.rect.Rect(self.x-12, self.y-12, self.size[0], self.size[1])
-    #
 
     def update_pos(self):
         """managing when you go through the walls"""
@@ -146,22 +134,17 @@ class TMoto:
         self.x += self.x_step
         self.y += self.y_step
         self.update_rect()
-    #
     
     def stop(self):
-        """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
         self.x_step = self.y_step = 0
-    #
 
     def update_trail(self):
         '''Updates the trail of the TMoto'''
         self.trail.append(pygame.rect.Rect(self.x, self.y, self.piece_size[0], self.piece_size[1]))
         while len(self.trail) > self.length:
             del self.trail[0]
-    #
 
     def pass_through_walls(self):
-        """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
         if self.x >= self.surface.get_rect()[2]:
             self.x = 0
         if self.x < 0:
@@ -170,7 +153,6 @@ class TMoto:
             self.y = 0
         if self.y < 0:
             self.y = self.surface.get_rect()[3]
-    #
 
     def proceed(self):
         """This function seems stupid..."""
@@ -183,10 +165,8 @@ class TMoto:
             self.set_position((0, -self.step))
         if self.direction == "down":
             self.set_position((0, self.step))
-    #
      
     def get_power_from(self, obj):
-        """ WRITE HERE THE DOCS FOR THIS FUNCTION!!! """
         # We want to establish normal 'self.step' or 'self.length',
         # iff the timer has already finished.
         if self.timer.ringing():
@@ -211,19 +191,19 @@ class TMoto:
 
         # If self is colliding 'obj'
         if self.collides(obj):
-            if obj.power == TFood.powers[0] and not self.powered[0]:
+            if obj.power == TPowerUp.powers[0] and not self.powered[0]:
                 self.powered[0] = True
                 self.step += self.INC
                 self.timer.start()
-            if obj.power == TFood.powers[0] and self.powered[0]:
+            if obj.power == TPowerUp.powers[0] and self.powered[0]:
                 self.timer.stop()
                 self.timer.start()
-            elif obj.power == TFood.powers[1] and not self.powered[1]:
+            elif obj.power == TPowerUp.powers[1] and not self.powered[1]:
                 self.powered[1] = True
                 self.length = round(self.length * 2)
                 self.update_trail()
                 self.timer.start()
-            if obj.power == TFood.powers[1] and self.powered[1]:
+            if obj.power == TPowerUp.powers[1] and self.powered[1]:
                 self.timer.stop()
                 self.timer.start()
                        
@@ -234,7 +214,6 @@ class TMoto:
             obj.appear()
 
         self.timer.inc() # increments timer, iff it has already started           
-    #
             
     def move(self):
         """Changes the directions of the TMoto"""
@@ -280,6 +259,8 @@ class TMoto:
         # displays the trail
         for x in self.trail[:-1]: # getting elements from start to end - 1
             self.surface.fill(self.piece_color, x)
-    #
     
-# end TMoto
+
+
+
+

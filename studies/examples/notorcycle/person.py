@@ -37,7 +37,6 @@ class Person(object):
         for s in sounds:
             if type(s) != str:
                 raise TypeError('a sound path is not a str')
-        #
         
         self.surface = surface
         self.name = name
@@ -66,12 +65,10 @@ class Person(object):
         self.rect = pygame.rect.Rect(self.x, self.y, self.width, self.height)
         
         pygame.display.update()
-    #
     def reset_direction(self):
         self.direction.clear()
         for _ in range(4):
             self.direction.append(False)    
-    #
     
     def set_direction(self, new_dir):
         '''0=North, 1=South, 2=Left, 3=Right'''
@@ -128,11 +125,9 @@ class Person(object):
                     
                 self.reset_direction()
                 self.direction[3] = True
-    #    
     
     def appear(self):
         self.surface.blit(self.image, self.rect)
-    #
     
     # changes x_change or y_change
     def move(self):
@@ -144,7 +139,6 @@ class Person(object):
             self.x_speed -= self.step                          
         elif self.direction[3]:
             self.x_speed += self.step
-    #
     
     # changes x_change or y_change
     def brake(self):
@@ -157,7 +151,6 @@ class Person(object):
             self.x_speed -= int(self.step / 2)
         elif self.x_speed < 0:
             self.x_speed += int(self.step / 2)
-    #
     
     def goto(self, x, y):
         if type(x) != int or type(y) != int:
@@ -165,13 +158,11 @@ class Person(object):
         self.x = x
         self.y = y
         self.rect = pygame.rect.Rect(self.x, self.y, self.width, self.height)
-    #
 
     def goto_initial_pos(self):
         self.x = self.pos[0]
         self.y = self.pos[1]
         self.rect = pygame.rect.Rect(self.x, self.y, self.width, self.height)
-    #
 
     def set_step(self, step):
         if type(step) != int:
@@ -188,9 +179,12 @@ class Person(object):
             return True
         else:
             return False
-    #
     
     def turn(self, angle):
         self.image = pygame.transform.rotate(self.image, angle)
     
     
+
+
+
+

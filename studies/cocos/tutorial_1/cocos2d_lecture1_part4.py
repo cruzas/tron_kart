@@ -76,7 +76,6 @@ class MouseDisplayer(cocos.layer.Layer):
                                      x=self.posx, y=self.posy)
         self.add(self.text)
 
-    # END
 
     # Function that update the text of the Label
     def update_text(self, x, y):
@@ -86,7 +85,6 @@ class MouseDisplayer(cocos.layer.Layer):
         self.text.element.x = self.posx
         self.text.element.y = self.posy
 
-    # END
 
     # Adding EVENT HANDLERS to handle events (mouse click or motion...)
 
@@ -116,7 +114,6 @@ class MouseDisplayer(cocos.layer.Layer):
         self.posx, self.posy = x, y
         self.update_text(x, y)
 
-    # END
 
     """This function is called when any mouse button is pressed
 
@@ -129,7 +126,6 @@ class MouseDisplayer(cocos.layer.Layer):
     def on_mouse_press(self, x, y, buttons, modifiers):
         self.posx, self.posy = cocos.director.director.get_virtual_coordinates(x, y)
         self.update_text(x, y)
-        # END
 
         # COCOS has 2 coordinates systems, a physical one and a virtual one.
         # The mouse event handlers (the function defined above)
@@ -158,3 +154,7 @@ mouse_displayer = MouseDisplayer()
 main_scene = cocos.scene.Scene(mouse_displayer)
 
 cocos.director.director.run(main_scene)
+
+
+
+

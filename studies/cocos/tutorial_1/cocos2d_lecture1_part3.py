@@ -162,3 +162,7 @@ key_displayer = KeyDisplay()
 main_scene = cocos.scene.Scene(key_displayer)
 
 cocos.director.director.run(main_scene)
+
+
+
+
