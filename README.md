@@ -9,7 +9,17 @@ Consequently, this repository will contain many files that will serve as tests a
 How to run the program?
 -
 
-Just execute the **run.py** script using Python 3.4.
+
+Just execute the **run.py** script using Python 3.4. 
+
+You can run `run.py` from the `IDLE` or from the terminal. If you want to run it from the terminal, you should first change the file permissions with the following command to make the script executable:
+
+    chmod +x run.py
+    
+Then you can simply run it using the following command:
+
+    ./run.py
+
 
 Looking for more information?
 -

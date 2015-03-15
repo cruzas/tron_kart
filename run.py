@@ -1,4 +1,5 @@
-"""starts the game"""
+#!/usr/bin/env python3
+# script that launches the application
 
 from src.trongrid import *
 
