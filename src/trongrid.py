@@ -7,12 +7,13 @@ Description: main class of the Tron Kart game
 
 import random
 import sys
+import tkinter
 
 from src.utils.tutilities import get_file_names
 from src.utils.tcolors import *
 from src.tmoto import * # imports TMoto, TTimer, TPowerUp and pygame
 from src.tboard import TBoard
-from src.intro.twindow import TWindow, tkinter
+from src.intro.twindow import TWindow
 from src.config.tcustom import * # import settings
 import src.config.tdefault
 

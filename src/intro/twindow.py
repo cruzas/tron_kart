@@ -10,7 +10,7 @@ TODO:
  - improve performance
 """
 
-import tkinter
+import tkinter as tk
 from tkinter import messagebox
 import pygame
 import os
@@ -19,7 +19,7 @@ from src.intro.constants import *
 from src.config.tcustom import *
 
 
-class TWindow(tkinter.Frame):
+class TWindow(tk.Frame):
     """ TWindow is a class specifically created for the Tron Kart game."""
     proceed = True
     toplevels = [False, False] # 0=instructions, 1=options
@@ -49,10 +49,10 @@ class TWindow(tkinter.Frame):
         self.root.resizable(0, 0)
 
         # HEAD
-        self.title_frame = self.get_panel(self.width, 50, color=BG_COLOR, fill=tkinter.X, expand=False)
+        self.title_frame = self.get_panel(self.width, 50, color=BG_COLOR, fill=tk.X, expand=False)
         self.title_img = self.get_title_img()
-        self.title_lab = tkinter.Label(self.title_frame, relief=tkinter.SUNKEN, bg="#000", image=self.title_img)
-        self.title_lab.pack(fill=tkinter.BOTH)
+        self.title_lab = tk.Label(self.title_frame, relief=tk.SUNKEN, bg="#000", image=self.title_img)
+        self.title_lab.pack(fill=tk.BOTH)
 
         # BODY
         self.body_frame = self.get_panel(self.width, self.height, color=BG_COLOR, pady=60)
@@ -89,7 +89,7 @@ class TWindow(tkinter.Frame):
         """docs"""
         if not TWindow.toplevels[0]:
             TWindow.toplevels[0] = True
-            top_level = tkinter.Toplevel(self.root, bg=BG_COLOR)
+            top_level = tk.Toplevel(self.root, bg=BG_COLOR)
             top_level.wm_title('Instructions')
             top_level.resizable(0, 0)
             width = 300
@@ -97,13 +97,13 @@ class TWindow(tkinter.Frame):
             x = self.root.winfo_x() - width
             y = self.root.winfo_y() 
             top_level.geometry('{0}x{1}+{2}+{3}'.format(width, height, x, y))
-            instructions = Instructions(top_level, self.btn_sound)
+            Instructions(top_level, self.btn_sound)
     
     def on_options_click(self, event):
         """docs"""
         if not TWindow.toplevels[1]:
             TWindow.toplevels[1] = True
-            top_level = tkinter.Toplevel(self.root, background=BG_COLOR)
+            top_level = tk.Toplevel(self.root, background=BG_COLOR)
             top_level.wm_title('Options')
             top_level.resizable(0, 0)
             width = 300
@@ -111,7 +111,7 @@ class TWindow(tkinter.Frame):
             x = self.root.winfo_x() + self.root.winfo_width()
             y = self.root.winfo_y()
             top_level.geometry('{0}x{1}+{2}+{3}'.format(width, height, x, y))
-            options = Options(top_level, self.btn_sound)
+            Options(top_level, self.btn_sound)
     
     def get_panel(self, w, h, color='#000', fill="both", expand=True, pady=0):
         """ Gets and packs a new Panel object"""
@@ -125,12 +125,12 @@ class TWindow(tkinter.Frame):
     
     def get_title_img(self):
         """ Returns an PhotoImage object for the title"""
-        img = tkinter.PhotoImage(file='src/images/logos/tk_logo.gif')
+        img = tk.PhotoImage(file='src/images/logos/tk_logo.gif')
         return img
 
     def get_button(self, text, event_handler, pady=25):
         """docs"""
-        btn = tkinter.Button(self.body_frame, text=text, width=25, bg='#2ff', font=NORMAL_FONT)
+        btn = tk.Button(self.body_frame, text=text, width=25, bg='#2ff', font=NORMAL_FONT)
         btn.bind('<Enter>', self.on_mouse_over_btn)
         btn.bind('<Leave>', self.on_mouse_leave_btn)
         btn.bind('<Button-1>', event_handler)
@@ -148,14 +148,14 @@ class TWindow(tkinter.Frame):
         self.btn_sound.stop()
 
 
-class Panel(tkinter.Frame):
+class Panel(tk.Frame):
     """docs"""
     def __init__(self, root, w, h, color='#000'):
         """docs"""
-        tkinter.Frame.__init__(self, root, width=w, height=h, background=color)
+        tk.Frame.__init__(self, root, width=w, height=h, background=color)
 
 
-class Instructions(tkinter.Frame):
+class Instructions(tk.Frame):
     """docs"""
     i_opened = False
     
@@ -177,7 +177,7 @@ class Instructions(tkinter.Frame):
 
     def get_button(self, text, event_handler, pady=20):
         """docs"""
-        btn = tkinter.Button(self.root, text=text, width=15, bg='#2ff', font=C_NORMAL_FONT)
+        btn = tk.Button(self.root, text=text, width=15, bg='#2ff', font=C_NORMAL_FONT)
         btn.bind('<Enter>', self.on_mouse_over_btn)
         btn.bind('<Leave>', self.on_mouse_leave_btn)
         btn.bind('<Button-1>', event_handler)
@@ -198,7 +198,7 @@ class Instructions(tkinter.Frame):
         """docs"""
         if not Instructions.i_opened:
             Instructions.i_opened = True
-            root = tkinter.Toplevel(self.root, bg=BG_COLOR)
+            root = tk.Toplevel(self.root, bg=BG_COLOR)
             root.wm_title('Commands')
             # root.resizable(0, 0)
             width = self.root.winfo_width()
@@ -213,7 +213,7 @@ class Instructions(tkinter.Frame):
         """docs"""
         if not Instructions.i_opened:
             Instructions.i_opened = True
-            root = tkinter.Toplevel(self.root, bg=BG_COLOR)
+            root = tk.Toplevel(self.root, bg=BG_COLOR)
             root.wm_title('Colors')
             root.resizable(0, 0)
             width = self.root.winfo_width()
@@ -221,13 +221,13 @@ class Instructions(tkinter.Frame):
             x = self.root.winfo_x()
             y = self.root.winfo_y() + height + 22
             root.geometry('{0}x{1}+{2}+{3}'.format(width, height, x, y))
-            colors = Colors(root, self.btn_sound)
+            Colors(root, self.btn_sound)
     
     def power_ups(self, event):
         """docs"""
         if not Instructions.i_opened:
             Instructions.i_opened = True
-            root = tkinter.Toplevel(self.root, bg=BG_COLOR)
+            root = tk.Toplevel(self.root, bg=BG_COLOR)
             root.wm_title('Power Ups')
             root.resizable(0, 0)
             width = self.root.winfo_width()
@@ -238,7 +238,7 @@ class Instructions(tkinter.Frame):
             power_ups = PowerUps(root, self.btn_sound)
 
 
-class Commands(tkinter.Frame):
+class Commands(tk.Frame):
     """docs"""
     def __init__(self, root, btn_sound):
         """docs"""
@@ -249,7 +249,7 @@ class Commands(tkinter.Frame):
         self.names = [PLAYER_1['name'][0:10], PLAYER_2['name'][0:10]]
         
         self.headers_1 = ['', self.names[0]]
-        self.data_1 = [['COMMAND', 'NAME']]
+        self.data_1 = [['Command', 'Name']]
         
         for k, v in P1_CMDS.items():               
             self.data_1.append([k.capitalize(), KEYS[v]])
@@ -261,7 +261,7 @@ class Commands(tkinter.Frame):
         self.columnconfigure(0, weight=1)
 
         self.headers_2 = ['', self.names[1]]
-        self.data_2 = [['COMMAND', 'NAME']]
+        self.data_2 = [['Command', 'Name']]
 
         for k, v in P2_CMDS.items():               
             self.data_2.append([k.capitalize(), KEYS[v]])
@@ -279,10 +279,18 @@ class Commands(tkinter.Frame):
 
 
 class Colors:
-    """docs"""
+    DESCRIPTION = """At the beginning of a new match,
+each player has a randomly chosen color.
+
+The color appears in the name
+at the top of the window,
+in cycle and in the tail of the cycle."""
     def __init__(self, root, btn_sound):
         self.root = root
         self.btn_sound = btn_sound
+        self.description = tk.Label(self.root, text=Colors.DESCRIPTION,
+                                    padx=10, font=("arial", 16), bg='black', fg='white')
+        self.description.pack(expand=1, fill='both')
         self.root.wm_protocol("WM_DELETE_WINDOW", self.on_exit)
     
     def on_exit(self):
@@ -292,10 +300,22 @@ class Colors:
 
 
 class PowerUps:
-    """docs"""
+    DESCRIPTION = """There are two power ups:
+one makes the tail increase;
+the other makes the cycle go faster.
+
+Both are two azurre squares,
+they differ only in the form:
+Squared spiral increases the tail;
+Triple arrow makes you go faster.
+"""
+    
     def __init__(self, root, btn_sound):
         self.root = root
         self.btn_sound = btn_sound
+        self.description = tk.Label(self.root, text=PowerUps.DESCRIPTION,
+                                    padx=10, font=("arial", 16), bg='black', fg='white')
+        self.description.pack(expand=1, fill='both')
         self.root.wm_protocol("WM_DELETE_WINDOW", self.on_exit)
     
     def on_exit(self):
@@ -304,7 +324,7 @@ class PowerUps:
         self.root.destroy()
     
 
-class Options(tkinter.Frame):
+class Options(tk.Frame):
     """docs"""
     o_opened = False
     
@@ -325,7 +345,7 @@ class Options(tkinter.Frame):
 
     def get_button(self, text, event_handler, pady=20):
         """docs"""
-        btn = tkinter.Button(self.root, text=text, width=15, bg='#2ff', font=C_NORMAL_FONT)
+        btn = tk.Button(self.root, text=text, width=15, bg='#2ff', font=C_NORMAL_FONT)
         btn.bind('<Enter>', self.on_mouse_over_btn)
         btn.bind('<Leave>', self.on_mouse_leave_btn)
         btn.bind('<Button-1>', event_handler)
@@ -346,7 +366,7 @@ class Options(tkinter.Frame):
         """docs"""
         if not Options.o_opened:
             Options.o_opened = True
-            root = tkinter.Toplevel(self.root, bg=BG_COLOR)
+            root = tk.Toplevel(self.root, bg=BG_COLOR)
             root.wm_title('Game Settings')
             root.resizable(0, 0)
             width = self.root.winfo_width()
@@ -360,7 +380,7 @@ class Options(tkinter.Frame):
         """docs"""
         if not Options.o_opened:
             Options.o_opened = True
-            root = tkinter.Toplevel(self.root, bg=BG_COLOR)
+            root = tk.Toplevel(self.root, bg=BG_COLOR)
             root.wm_title('Video Settings')
             root.resizable(0, 0)
             width = self.root.winfo_width()
@@ -374,7 +394,7 @@ class Options(tkinter.Frame):
         """docs"""
         if not Options.o_opened:
             Options.o_opened = True
-            root = tkinter.Toplevel(self.root, bg=BG_COLOR)
+            root = tk.Toplevel(self.root, bg=BG_COLOR)
             root.wm_title('Audio Settings')
             root.resizable(0, 0)
             width = self.root.winfo_width()
