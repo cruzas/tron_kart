@@ -3,9 +3,6 @@ Tron Kart
 
 This repository holds the work of 4 contributors with the aim to develop a game inspired by the classic Tron game and Mario Kart.
 
-Please note that this project is currently under development. 
-Consequently, this repository will contain many files that will serve as tests and sample files.
-
 How to run the program?
 -
 
@@ -21,8 +18,28 @@ Then you can simply run it using the following command:
     ./run.py
 
 
+TODO
+-
+
+Please note that this project is currently under development. Consequently, this repository will contain many files that will serve as tests and sample files.
+
+Half implemented:
+
+- Options menus
+
+
+Future features:
+
+- Flapping against own tail
+- New power ups
+- Music system
+- Multilevels 
+- Support for joystick
+- Support for changing windows size
+
 Looking for more information?
 -
+
 Please take a look at our [**wiki**](https://github.com/cruzas/tron_grid/wiki) to find information on the [**user guide**](https://github.com/cruzas/tron_grid/wiki#user-guide) and the work that has been done developing this game.
 
 
