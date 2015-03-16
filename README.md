@@ -10,7 +10,7 @@ How to run the program?
 -
 
 
-Just execute the **run.py** script using Python 3.4. 
+Just execute the **run.py** script using Python 3.4 (other versions of Python 3 should work as well). 
 
 You can run `run.py` from the `IDLE` or from the terminal. If you want to run it from the terminal, you should first change the file permissions with the following command to make the script executable:
 

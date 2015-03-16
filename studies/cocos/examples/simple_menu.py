@@ -15,9 +15,7 @@ import cocos
 # Scenes (more or less) as separate apps
                    
 class TronMenu(cocos.menu.Menu):
-
     is_event_handler = True
-
     def __init__(self):
         super(TronMenu, self).__init__()
         self.m_items = []
@@ -45,11 +43,8 @@ class TronMenu(cocos.menu.Menu):
 # Setting up the window
 
 cocos.director.director.init()  # Initializes everything.
-
 menu = TronMenu()
-
 scene = cocos.scene.Scene(menu)
-
 cocos.director.director.run(scene)
 
 

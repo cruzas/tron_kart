@@ -38,10 +38,8 @@ while 1:
     screen.fill(pg.Color(0,0,0))
     pos = (pos + 1) % screen.get_width()
     pg.draw.circle(screen, pg.Color(255,255,255), (pos,100), 30)
-
     # Update the pygame display
     pg.display.flip()
-
     # Update the Tk display
     root.update()
 
