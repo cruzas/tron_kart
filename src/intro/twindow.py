@@ -63,8 +63,15 @@ class TWindow(tk.Frame):
                         self.get_button('Options', self.on_options_click)]
 
         # MUSIC
+        # Buttons sounds
         self.btn_sound = pygame.mixer.Sound('src/sounds/buttons/mouse_over_button_sound.wav')
+        self.btn_sound.set_volume(0.1)
 
+        # Background music
+        self.bg_music = pygame.mixer.Sound('src/sounds/intro/encom.wav')
+        self.bg_music.set_volume(0.2)
+        self.bg_music.play(-1)
+        
         # WINDOWS SETTINGS
         # put window as top window
         self.root.lift()
@@ -82,6 +89,7 @@ class TWindow(tk.Frame):
     
     def on_play_click(self, event):
         """docs"""
+        self.bg_music.stop()
         self.root.destroy()
         TWindow.proceed = True
 
@@ -128,13 +136,13 @@ class TWindow(tk.Frame):
         img = tk.PhotoImage(file='src/images/logos/tk_logo.gif')
         return img
 
-    def get_button(self, text, event_handler, pady=25):
+    def get_button(self, text, event_handler, pady=20):
         """docs"""
-        btn = tk.Button(self.body_frame, text=text, width=25, bg='#2ff', font=NORMAL_FONT)
+        btn = tk.Button(self.body_frame, text=text, width=22, bg='#2ff', font=NORMAL_FONT)
         btn.bind('<Enter>', self.on_mouse_over_btn)
         btn.bind('<Leave>', self.on_mouse_leave_btn)
         btn.bind('<Button-1>', event_handler)
-        btn.pack(ipady=3, pady=pady)
+        btn.pack(ipady=4, pady=pady)
         return btn
     
     def on_mouse_over_btn(self, event):
@@ -235,7 +243,7 @@ class Instructions(tk.Frame):
             x = self.root.winfo_x()
             y = self.root.winfo_y() + height + 22
             root.geometry('{0}x{1}+{2}+{3}'.format(width, height, x, y))
-            power_ups = PowerUps(root, self.btn_sound)
+            PowerUps(root, self.btn_sound)
 
 
 class Commands(tk.Frame):
@@ -374,7 +382,7 @@ class Options(tk.Frame):
             x = self.root.winfo_x()
             y = self.root.winfo_y() + height + 22
             root.geometry('{0}x{1}+{2}+{3}'.format(width, height, x, y))
-            cmds = GameSettings(root, self.btn_sound)
+            GameSettings(root, self.btn_sound)
     
     def video_settings(self, event):
         """docs"""
@@ -388,7 +396,7 @@ class Options(tk.Frame):
             x = self.root.winfo_x()
             y = self.root.winfo_y() + height + 22
             root.geometry('{0}x{1}+{2}+{3}'.format(width, height, x, y))
-            colors = VideoSettings(root, self.btn_sound)
+            VideoSettings(root, self.btn_sound)
     
     def audio_settings(self, event):
         """docs"""
@@ -402,7 +410,7 @@ class Options(tk.Frame):
             x = self.root.winfo_x()
             y = self.root.winfo_y() + height + 22
             root.geometry('{0}x{1}+{2}+{3}'.format(width, height, x, y))
-            power_ups = AudioSettings(root, self.btn_sound)
+            AudioSettings(root, self.btn_sound)
 
 
 class GameSettings:

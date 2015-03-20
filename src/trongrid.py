@@ -14,8 +14,7 @@ from src.utils.tcolors import *
 from src.tmoto import * # imports TMoto, TTimer, TPowerUp and pygame
 from src.tboard import TBoard
 from src.intro.twindow import TWindow
-from src.config.tcustom import * # import settings
-import src.config.tdefault
+from src.config.tcustom import * 
 
 
 class TronGrid:
@@ -55,17 +54,7 @@ class TronGrid:
             self.p1_cmds = P1_CMDS
             self.p2_cmds = P2_CMDS
         except Exception:
-            try:
-                self.name_1 = src.tdefault.PLAYER_1['name']
-                self.name_2 = src.tdefault.PLAYER_2['name']
-                self.image_1 = src.tdefault.PLAYER_1['image']
-                self.image_2 = src.tdefault.PLAYER_2['image']
-                self.color_1 = src.tdefault.PLAYER_1['color']
-                self.color_2 = src.tdefault.PLAYER_2['color']
-                self.p1_cmds = src.tdefault.P1_CMDS
-                self.p2_cmds = src.tdefault.P2_CMDS
-            except Exception:
-                raise Exception('fatal error loading the game settings')
+            raise Exception('fatal error loading the game settings')
             
         # first player
         self.pos = (100, self.board.resolution[1]/2)
@@ -85,10 +74,12 @@ class TronGrid:
         # SOUNDS: TO MAKE THE PLAYER SELECT THE MUSIC MAKE A VARIABLE WICH TAKES A NUMBER
         # FROM 0 TO THE NUMBER OF SONGS-1 AND PUT IT IN SELF_MUSIC_CHOICE INSTEAD OF THE RANDOM
         self.music_list = BACK_MUSIC
-        self.music_choice = random.randint(0,len(self.music_list)-1) #numbers from 0 to number of music files-1
+        self.music_choice = random.randint(0, len(self.music_list) - 1) #numbers from 0 to number of music files-1
         self.music = self.music_list[self.music_choice]
         self.explosion_sound = pygame.mixer.Sound('src/sounds/explosion.aiff')
         self.game_music = pygame.mixer.Sound(self.music)
+
+        self.pause_music = pygame.mixer.Sound('src/sounds/intro/encom.wav')
         
         pygame.display.update()
         self.run()
@@ -108,6 +99,8 @@ class TronGrid:
 
     def pause(self):
         """Called when the game is paused"""
+        self.game_music.stop()
+        self.pause_music.play(-1)
         paused = True
         msg = "Paused"
         size = 60
@@ -128,6 +121,8 @@ class TronGrid:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_c:
                         paused = False
+                        self.game_music.play(-1)
+                        self.pause_music.stop()                        
                     elif event.key == pygame.K_q:
                         pygame.quit()
                         quit()

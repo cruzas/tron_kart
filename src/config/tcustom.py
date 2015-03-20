@@ -41,7 +41,7 @@ P1_CMDS = {'up': pygame.K_w,
            'right': pygame.K_d,
            'stop': pygame.K_e}
 
-PLAYER_1 = {'name': 'Kill Bill (S. Jobs)',
+PLAYER_1 = {'name': 'S. Jobs',
             'image': PLAYERS_IMGS[randcolour1],
             'color': COLORS[randcolour1],
             'commands': P1_CMDS}
@@ -52,7 +52,7 @@ P2_CMDS = {'up': pygame.K_UP,
            'right': pygame.K_RIGHT,
            'stop': pygame.K_RSHIFT}
 
-PLAYER_2 = {'name': 'Bill Logical Gate',
+PLAYER_2 = {'name': 'B. Gates',
             'image': PLAYERS_IMGS[randcolour2],
             'color': COLORS[randcolour2],
             'commands': P1_CMDS}
@@ -76,3 +76,7 @@ if len(WAV) > 0:
     for m in WAV:
         if type(m) == str:
             BACK_MUSIC.append(B_M_PATH + m)
+
+#
+I_M_PATH = 'src/sounds/intro/'
+INTRO_MUSIC = []
